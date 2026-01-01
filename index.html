@@ -1,0 +1,1213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>X-Ray Safety Training - XRD & XRF Instruments</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>X-Ray Safety Training</h1>
+            <h2>XRD (Powder & Single Crystal) and XRF Instruments</h2>
+            <p class="subtitle">Based on DOE X-Ray Safety Guidelines</p>
+        </header>
+
+        <div id="login-section" class="section">
+            <h3>Begin Training</h3>
+            <p>Please enter your email address to start the training module. Your completion will be recorded for certification purposes.</p>
+            <form id="login-form">
+                <input type="email" id="user-email" placeholder="Enter your email address" required>
+                <button type="submit">Start Training</button>
+            </form>
+        </div>
+
+        <div id="training-content" class="hidden">
+            <div class="progress-bar">
+                <div id="progress" class="progress-fill"></div>
+            </div>
+            <p class="progress-text">Section <span id="current-section">1</span> of <span id="total-sections">10</span></p>
+
+            <div class="training-section" id="section-1">
+                <h3>1. Introduction to X-Ray Radiation</h3>
+                <div class="content">
+                    <h4>What are X-Rays?</h4>
+                    <p>X-rays are electromagnetic radiation with photon energies typically ranging from 100 eV to 100 keV, corresponding to wavelengths of approximately 0.01 to 10 nm. In laboratory XRD and XRF instrumentation, characteristic X-rays are produced through electron bombardment of metal target anodes (commonly Cu, Mo, Cr, or Ag).</p>
+                    
+                    <h4>Production Mechanism</h4>
+                    <p>When high-energy electrons (accelerated through potentials of 20-60 kV) strike a metal target, two types of X-radiation are produced:</p>
+                    
+                    <h5>1. Bremsstrahlung (Braking Radiation):</h5>
+                    <ul>
+                        <li>Continuous spectrum resulting from electron deceleration</li>
+                        <li>Energy range: 0 to maximum electron kinetic energy (eV)</li>
+                        <li>Intensity proportional to Z² (atomic number squared) and electron current</li>
+                        <li>Contributes to background radiation and scattered dose</li>
+                    </ul>
+
+                    <h5>2. Characteristic Radiation:</h5>
+                    <ul>
+                        <li>Discrete spectral lines specific to target material</li>
+                        <li>Produced when inner-shell electrons are ejected and outer electrons transition</li>
+                        <li><strong>Common laboratory sources:</strong>
+                            <ul>
+                                <li>Cu Kα: 8.04 keV (λ = 1.54 Å) - most common for XRD</li>
+                                <li>Mo Kα: 17.4 keV (λ = 0.71 Å) - used for single crystal XRD</li>
+                                <li>Cr Kα: 5.41 keV (λ = 2.29 Å)</li>
+                                <li>Ag Kα: 22.1 keV (λ = 0.56 Å)</li>
+                            </ul>
+                        </li>
+                    </ul>
+                    
+                    <h4>X-Ray Properties Relevant to Safety</h4>
+                    
+                    <h5>Penetrating Power:</h5>
+                    <p>The linear attenuation coefficient (μ) determines penetration depth according to: I(x) = I₀ × e<sup>(-μx)</sup></p>
+                    <p>For Cu Kα (8.04 keV) radiation:</p>
+                    <ul>
+                        <li>Air: μ ≈ 0.034 cm⁻¹ (penetrates meters)</li>
+                        <li>Soft tissue: μ ≈ 0.5 cm⁻¹</li>
+                        <li>Lead: μ ≈ 130 cm⁻¹</li>
+                        <li>Aluminum: μ ≈ 2.8 cm⁻¹</li>
+                    </ul>
+
+                    <h5>Ionizing Radiation Characteristics:</h5>
+                    <p>X-rays interact with matter through three primary mechanisms:</p>
+                    <ul>
+                        <li><strong>Photoelectric Absorption</strong> (dominant at laboratory X-ray energies): Photon transfers all energy to bound electron; responsible for most biological damage</li>
+                        <li><strong>Compton Scattering</strong> (significant at higher energies): Partial energy transfer to loosely bound electrons; important for scatter radiation fields</li>
+                        <li><strong>Rayleigh (Coherent) Scattering:</strong> Elastic scattering with no energy loss; dominant mechanism in XRD</li>
+                    </ul>
+
+                    <h5>Biological Effects:</h5>
+                    <p>X-rays deposit energy in tissue through ionization cascades:</p>
+                    <ul>
+                        <li>Direct DNA strand breaks (double-strand breaks particularly hazardous)</li>
+                        <li>Indirect damage via free radical formation (OH•, H•, e⁻aq)</li>
+                        <li>Cellular repair mechanisms may be overwhelmed at high dose rates</li>
+                        <li>Relative Biological Effectiveness (RBE) ≈ 1 for X-rays</li>
+                    </ul>
+
+                    <h5>Invisibility and Detection:</h5>
+                    <p>X-rays cannot be detected by human senses, requiring instrumentation:</p>
+                    <ul>
+                        <li>Ion chamber survey meters (recommended for dose rate measurements)</li>
+                        <li>Geiger-Müller detectors (qualitative detection, energy-dependent response)</li>
+                        <li>Thermoluminescent dosimeters (TLDs) for personnel monitoring</li>
+                        <li>Film badges (historical method, largely replaced by TLDs)</li>
+                    </ul>
+
+                    <div class="info-box">
+                        <strong>Key Point:</strong> Laboratory X-ray sources produce photon energies in the 5-25 keV range, where photoelectric absorption in tissue is maximum, resulting in high biological effectiveness per unit energy deposited.
+                    </div>
+                </div>
+            </div>
+
+            <div class="training-section hidden" id="section-2">
+                <h3>2. XRD and XRF Instrumentation</h3>
+                <div class="content">
+                    <h4>X-Ray Diffraction (XRD) Systems</h4>
+                    
+                    <h5>Fundamental Principle:</h5>
+                    <p>XRD exploits Bragg's Law to analyze crystalline structure: <strong>nλ = 2d sinθ</strong></p>
+                    <p>Where: n = diffraction order, λ = X-ray wavelength, d = interplanar spacing, θ = incident angle</p>
+                    
+                    <h5>Powder XRD Configuration:</h5>
+                    <ul>
+                        <li>Sample form: Polycrystalline powder, thin films, or bulk materials</li>
+                        <li>Geometry: Bragg-Brentano (θ-θ or θ-2θ) most common</li>
+                        <li>Typical 2θ range: 5° to 90°</li>
+                        <li>Applications: Phase identification, crystallinity, lattice parameters</li>
+                        <li><strong>Radiation hazards:</strong> Primary beam exposure during sample loading, scattered radiation from sample, diffracted beams at specific 2θ angles</li>
+                    </ul>
+
+                    <h5>Single Crystal XRD Configuration:</h5>
+                    <ul>
+                        <li>Sample form: Single crystal (typical size 0.1-0.5 mm)</li>
+                        <li>Geometry: Four-circle goniometer or area detector systems</li>
+                        <li>Applications: Complete structure determination, absolute configuration</li>
+                        <li><strong>Enhanced radiation hazards:</strong> Crystal centering requires beam access, goniometer manipulation near beam path, extended measurement times (hours to days), higher power sources often used</li>
+                    </ul>
+
+                    <h4>X-Ray Fluorescence (XRF) Systems</h4>
+                    
+                    <h5>Fundamental Principle:</h5>
+                    <p>Primary X-rays eject inner-shell electrons; characteristic fluorescent X-rays are emitted as outer electrons fill vacancies. Fluorescent energy is element-specific, enabling compositional analysis.</p>
+                    
+                    <h5>Energy-Dispersive XRF (EDXRF):</h5>
+                    <ul>
+                        <li>Detector: Solid-state (Si(Li), SiPIN, or SDD)</li>
+                        <li>Energy resolution: 130-150 eV at 5.9 keV</li>
+                        <li>Detection range: Na (Z=11) to U (Z=92)</li>
+                        <li>Configuration: Often enclosed sample chamber</li>
+                    </ul>
+
+                    <h5>Handheld/Portable XRF:</h5>
+                    <ul>
+                        <li><strong>EXTREME HAZARD:</strong> Open-beam configuration</li>
+                        <li>Typical operating: 40-50 kV at 10-200 μA</li>
+                        <li>Primary beam fully accessible when not in contact with sample</li>
+                        <li>Shutter failure can result in unshielded exposure</li>
+                        <li>Requires specialized safety protocols</li>
+                    </ul>
+
+                    <h4>X-Ray Sources and Operating Parameters</h4>
+                    
+                    <h5>Sealed X-Ray Tubes (Most Common):</h5>
+                    <ul>
+                        <li>Construction: Evacuated glass or ceramic envelope</li>
+                        <li>Cathode: Tungsten filament (thermionic emission)</li>
+                        <li>Anode: Cu, Mo, Cr, or Ag target (water or air cooled)</li>
+                        <li>Typical operational life: 2,000-10,000 hours</li>
+                        <li><strong>Operating parameters:</strong> Voltage: 20-60 kV, Current: 5-60 mA, Power: 0.5-3.0 kW</li>
+                    </ul>
+
+                    <h5>Dose Rate Characteristics:</h5>
+                    <p><strong>For a typical 40 kV, 40 mA Cu tube:</strong></p>
+                    <ul>
+                        <li>Exit port intensity: ~5 × 10⁵ R/hr</li>
+                        <li>Annual occupational limit (5 rem) delivered in: <strong>0.036 seconds</strong></li>
+                        <li>Lethal dose (500 rem) delivered in: <strong>3.6 seconds</strong></li>
+                    </ul>
+
+                    <h5>Inverse Square Law Application:</h5>
+                    <p>Dose Rate (r) = Dose Rate (r₀) × (r₀/r)²</p>
+                    <p><strong>Example calculation:</strong></p>
+                    <ul>
+                        <li>If dose rate at 1 cm = 10,000 R/hr</li>
+                        <li>Then dose rate at 10 cm = 10,000 × (1/10)² = 100 R/hr</li>
+                        <li>And dose rate at 100 cm = 10,000 × (1/100)² = 1 R/hr</li>
+                    </ul>
+
+                    <h4>Quantitative Hazard Assessment</h4>
+                    
+                    <h5>Direct Beam Exposure Scenario:</h5>
+                    <p>Assume operator's hand enters primary beam for 1 second:</p>
+                    <ul>
+                        <li>Tube: 45 kV, 40 mA Cu source</li>
+                        <li>Primary beam intensity: 5 × 10⁵ R/hr</li>
+                        <li>Exposure distance: 5 cm from focal spot</li>
+                        <li>Corrected intensity: 5 × 10⁵ × (1/5)² = 2 × 10⁴ R/hr</li>
+                        <li>Dose in 1 second: 2 × 10⁴ R/hr × (1/3600 hr) ≈ 5.6 R</li>
+                        <li><strong>Result:</strong> This exceeds annual whole-body limit (5 rem) in 1 second</li>
+                    </ul>
+
+                    <h5>Scatter Radiation:</h5>
+                    <p>At 90° scattering angle, 50 cm from sample:</p>
+                    <ul>
+                        <li>Scattered intensity ≈ 0.1% of primary beam</li>
+                        <li>If primary = 10⁵ R/hr, scattered = 100 R/hr at sample</li>
+                        <li>At 50 cm: 100 × (10/50)² = 4 R/hr (still extremely hazardous)</li>
+                    </ul>
+
+                    <div class="warning-box">
+                        <strong>CRITICAL WARNING:</strong> Even "low power" laboratory X-ray instruments operating at 1-3 kW can deliver fatal doses in seconds if safety interlocks are bypassed or defeated. There is no safe direct beam exposure scenario.
+                    </div>
+                </div>
+            </div>
+
+            <div class="training-section hidden" id="section-3">
+                <h3>3. Biological Effects of X-Ray Radiation</h3>
+                <div class="content">
+                    <h4>Mechanisms of Radiation Damage</h4>
+                    
+                    <h5>Energy Deposition and Ionization:</h5>
+                    <p>When X-rays interact with biological tissue, energy is deposited through ionization events. For laboratory X-ray energies (5-25 keV):</p>
+                    <ul>
+                        <li>Linear Energy Transfer (LET) ≈ 2-3 keV/μm in tissue</li>
+                        <li>Energy required to create ion pair in tissue: ~33 eV</li>
+                        <li>For 8 keV photon (Cu Kα): ~240 ion pairs per photon interaction</li>
+                        <li>Ionization density creates clusters of molecular damage within ~2 nm radius</li>
+                    </ul>
+
+                    <h5>Direct vs. Indirect Damage:</h5>
+                    <p><strong>Direct Damage (~30% of total):</strong></p>
+                    <ul>
+                        <li>Ionization of critical molecules (DNA, RNA, proteins)</li>
+                        <li>Direct strand breaks in DNA double helix</li>
+                        <li>Base damage and cross-linking</li>
+                    </ul>
+                    
+                    <p><strong>Indirect Damage (~70% of total):</strong></p>
+                    <ul>
+                        <li>Radiolysis of water molecules: H₂O → H₂O⁺ + e⁻</li>
+                        <li>Formation of free radicals: Hydroxyl radical (OH•), Hydrogen radical (H•), Hydrated electron (e⁻aq)</li>
+                        <li>Free radicals diffuse and damage nearby molecules</li>
+                        <li>Chain reactions amplify initial damage</li>
+                    </ul>
+
+                    <h5>DNA Damage Types:</h5>
+                    <ul>
+                        <li><strong>Single-strand breaks (SSB):</strong> ~1000 per Gy per cell - usually repaired efficiently</li>
+                        <li><strong>Double-strand breaks (DSB):</strong> ~40 per Gy per cell - more difficult to repair, can lead to chromosomal aberrations</li>
+                        <li><strong>Base damage:</strong> ~2000 per Gy per cell - can cause point mutations if misrepaired</li>
+                        <li><strong>DNA-protein cross-links:</strong> Complex lesions difficult to repair</li>
+                    </ul>
+
+                    <h4>Deterministic Effects (Tissue Reactions)</h4>
+                    <p>Deterministic effects exhibit threshold doses and severity increases with dose.</p>
+                    
+                    <h5>Skin Effects (most relevant for hand/extremity exposure):</h5>
+                    <p><strong>Acute Dose Thresholds (single exposure):</strong></p>
+                    <ul>
+                        <li>Transient erythema: 2 Gy (200 rad)</li>
+                        <li>Main erythema: 6 Gy (600 rad)</li>
+                        <li>Dry desquamation: 10 Gy (1000 rad)</li>
+                        <li>Moist desquamation: 15 Gy (1500 rad)</li>
+                        <li>Blister formation: 20 Gy (2000 rad)</li>
+                        <li>Ulceration: 25 Gy (2500 rad)</li>
+                        <li>Necrosis: 30+ Gy (3000+ rad)</li>
+                    </ul>
+
+                    <p><strong>Timeline:</strong></p>
+                    <ul>
+                        <li>0-24 hours: Immediate erythema (transient, >10 Gy)</li>
+                        <li>7-14 days: Main erythematous reaction</li>
+                        <li>14-28 days: Dry desquamation, epilation</li>
+                        <li>21-35 days: Moist desquamation (severe exposure)</li>
+                        <li>>6 weeks: Late effects, possible necrosis</li>
+                    </ul>
+
+                    <h5>Example Calculation:</h5>
+                    <p>Hand exposed to primary beam (10⁵ R/hr) for 0.5 seconds:</p>
+                    <ul>
+                        <li>Dose = 10⁵ × (0.5/3600) ≈ 14 R ≈ 14 rad ≈ 0.14 Gy</li>
+                        <li>Below erythema threshold but significant injury if repeated</li>
+                    </ul>
+                    <p>Hand exposed for 3 seconds:</p>
+                    <ul>
+                        <li>Dose = 10⁵ × (3/3600) ≈ 83 R ≈ 83 rad ≈ 0.83 Gy</li>
+                        <li>Approaches transient erythema threshold - visible skin reddening likely</li>
+                    </ul>
+
+                    <h5>Eye Lens Effects:</h5>
+                    <ul>
+                        <li>Threshold for detectable opacities: 0.5 Gy (50 rad) acute</li>
+                        <li>Threshold for vision-impairing cataract: 2-10 Gy (200-1000 rad) acute</li>
+                        <li>Latency period: 6 months to several years</li>
+                        <li>Annual occupational limit (lens): 15 rem (150 mSv)</li>
+                    </ul>
+
+                    <h5>Hematopoietic Effects (whole-body exposure):</h5>
+                    <ul>
+                        <li>Detectable blood changes: 0.25 Gy (25 rad)</li>
+                        <li>Mild radiation sickness: 1 Gy (100 rad)</li>
+                        <li>Severe radiation sickness: 4-6 Gy (400-600 rad)</li>
+                        <li>LD₅₀/₆₀ (lethal dose, 50% mortality, 60 days): 3-5 Gy without treatment</li>
+                    </ul>
+
+                    <h4>Stochastic Effects (Cancer and Genetic Effects)</h4>
+                    <p>Stochastic effects have no threshold; probability increases with dose.</p>
+                    
+                    <h5>Cancer Risk Estimates (ICRP Publication 103):</h5>
+                    <ul>
+                        <li>Nominal risk coefficient: 5.5% per Sv for whole population</li>
+                        <li>For occupational exposure: 4.1% per Sv (adult workers)</li>
+                        <li>Fatal cancer: 4.0% per Sv</li>
+                        <li>Non-fatal cancer: 0.8% per Sv</li>
+                        <li>Severe hereditary effects: 0.2% per Sv</li>
+                    </ul>
+
+                    <h5>Risk Calculation Example:</h5>
+                    <p>Whole-body exposure: 100 mrem (1 mSv)</p>
+                    <ul>
+                        <li>Excess lifetime cancer risk: 1 mSv × 0.055/Sv = 5.5 × 10⁻⁵</li>
+                        <li>(approximately 1 in 18,000 chance of fatal cancer)</li>
+                    </ul>
+
+                    <h5>Latency Periods:</h5>
+                    <ul>
+                        <li>Leukemia: 2-10 years (peak at 7 years)</li>
+                        <li>Solid tumors: 10-60 years (peak at 40+ years for some cancers)</li>
+                        <li>Hereditary effects: appear in offspring</li>
+                    </ul>
+
+                    <h4>ALARA Principle (As Low As Reasonably Achievable)</h4>
+                    <p>ALARA is not just regulatory compliance but optimization:</p>
+                    <ul>
+                        <li><strong>Dose limits:</strong> Regulatory maximum (5 rem/year occupational)</li>
+                        <li><strong>Dose constraints:</strong> Administrative control levels (typically 10% of limit)</li>
+                        <li><strong>ALARA goal:</strong> Achieve doses well below constraints</li>
+                    </ul>
+
+                    <div class="info-box">
+                        <strong>Key Point:</strong> For properly functioning, enclosed XRD/XRF systems, operator doses should be effectively zero (<10 mrem/year). Any measurable dose indicates potential safety system degradation requiring immediate investigation.
+                    </div>
+                </div>
+            </div>
+
+            <div class="training-section hidden" id="section-4">
+                <h3>4. Radiation Dose and Units</h3>
+                <div class="content">
+                    <h4>Understanding Radiation Measurements</h4>
+                    
+                    <h5>Traditional Units:</h5>
+                    <ul>
+                        <li><strong>Roentgen (R):</strong> Measure of exposure in air (ionization)
+                            <ul>
+                                <li>1 R = 2.58 × 10⁻⁴ coulombs/kg air</li>
+                                <li>Only applies to X-rays and gamma rays in air</li>
+                            </ul>
+                        </li>
+                        <li><strong>Rad (Radiation Absorbed Dose):</strong> Energy deposited in tissue
+                            <ul>
+                                <li>1 rad = 100 ergs/g = 0.01 J/kg</li>
+                                <li>Applies to all radiation types</li>
+                                <li>For X-rays in soft tissue: 1 R ≈ 1 rad (approximately)</li>
+                            </ul>
+                        </li>
+                        <li><strong>Rem (Roentgen Equivalent Man):</strong> Biological effect of radiation
+                            <ul>
+                                <li>rem = rad × QF (Quality Factor)</li>
+                                <li>QF = 1 for X-rays and gamma rays</li>
+                                <li>For X-rays: 1 rad = 1 rem</li>
+                            </ul>
+                        </li>
+                    </ul>
+
+                    <h5>SI Units:</h5>
+                    <ul>
+                        <li><strong>Gray (Gy):</strong> SI unit for absorbed dose
+                            <ul>
+                                <li>1 Gy = 1 J/kg = 100 rad</li>
+                            </ul>
+                        </li>
+                        <li><strong>Sievert (Sv):</strong> SI unit for dose equivalent
+                            <ul>
+                                <li>1 Sv = 100 rem</li>
+                                <li>Sv = Gy × WR (Radiation Weighting Factor)</li>
+                                <li>WR = 1 for X-rays</li>
+                                <li>For X-rays: 1 Gy = 1 Sv</li>
+                            </ul>
+                        </li>
+                    </ul>
+
+                    <h5>Effective Dose:</h5>
+                    <p>Effective Dose (E) = Σ (wT × HT)</p>
+                    <p>Where: wT = tissue weighting factor, HT = equivalent dose to tissue T</p>
+                    <p><strong>Example:</strong> 50 rem to hands</p>
+                    <ul>
+                        <li>Effective dose = 50 rem × 0.01 (skin wT) = 0.5 rem</li>
+                        <li>(This is why extremity limits are higher than whole-body limits)</li>
+                    </ul>
+
+                    <h5>Dose Rate vs. Total Dose:</h5>
+                    <ul>
+                        <li><strong>Dose Rate:</strong> Amount of dose per unit time (rem/hr, mSv/hr)</li>
+                        <li><strong>Total Dose:</strong> Integrated dose over exposure time (rem, mSv)</li>
+                        <li><strong>Formula:</strong> Total Dose = Dose Rate × Time</li>
+                    </ul>
+                    <p><strong>Example:</strong> Working in 10 mR/hr field for 3 hours</p>
+                    <ul>
+                        <li>Total dose = 10 mR/hr × 3 hr = 30 mR</li>
+                    </ul>
+
+                    <h4>Dose Limits (DOE 10 CFR 835)</h4>
+                    <table>
+                        <tr>
+                            <th>Category</th>
+                            <th>Annual Limit (rem)</th>
+                            <th>Annual Limit (mSv)</th>
+                        </tr>
+                        <tr>
+                            <td>Total Effective Dose</td>
+                            <td>5</td>
+                            <td>50</td>
+                        </tr>
+                        <tr>
+                            <td>Lens of Eye (equiv. dose)</td>
+                            <td>15</td>
+                            <td>150</td>
+                        </tr>
+                        <tr>
+                            <td>Extremities (hands, feet)</td>
+                            <td>50</td>
+                            <td>500</td>
+                        </tr>
+                        <tr>
+                            <td>Skin (any 10 cm²)</td>
+                            <td>50</td>
+                            <td>500</td>
+                        </tr>
+                        <tr>
+                            <td>General Public</td>
+                            <td>0.1</td>
+                            <td>1</td>
+                        </tr>
+                        <tr>
+                            <td>Declared Pregnant Worker</td>
+                            <td>0.5 (gestation)</td>
+                            <td>5 (gestation)</td>
+                        </tr>
+                    </table>
+
+                    <h4>Dose Context and Perspective</h4>
+                    
+                    <h5>Natural Background Radiation:</h5>
+                    <ul>
+                        <li>Cosmic radiation: ~30 mrem/year</li>
+                        <li>Terrestrial radiation: ~30 mrem/year</li>
+                        <li>Radon in homes: ~200 mrem/year (highly variable)</li>
+                        <li>Internal (K-40, C-14): ~40 mrem/year</li>
+                        <li><strong>Total average: ~300 mrem/year in United States</strong></li>
+                    </ul>
+
+                    <h5>Medical Exposures:</h5>
+                    <ul>
+                        <li>Chest X-ray: 10 mrem</li>
+                        <li>Dental X-ray: 5 mrem</li>
+                        <li>Mammogram: 40 mrem</li>
+                        <li>CT scan (abdomen): 1000 mrem (1 rem)</li>
+                        <li>Whole-body PET scan: 1400 mrem</li>
+                    </ul>
+
+                    <h5>XRD/XRF Context:</h5>
+                    <ul>
+                        <li>Properly functioning enclosed system: <1 mrem/year operator dose</li>
+                        <li>Direct beam exposure (1 second): 1000-10,000 rem (fatal)</li>
+                    </ul>
+
+                    <h4>Dose Rate Comparison Table</h4>
+                    <table>
+                        <tr>
+                            <th>Source</th>
+                            <th>Dose Rate</th>
+                            <th>Time to Annual Limit</th>
+                        </tr>
+                        <tr>
+                            <td>Natural background</td>
+                            <td>0.03 mrem/hr</td>
+                            <td>167,000 hours</td>
+                        </tr>
+                        <tr>
+                            <td>Commercial air travel</td>
+                            <td>0.3-0.6 mrem/hr</td>
+                            <td>8,000-17,000 hours</td>
+                        </tr>
+                        <tr>
+                            <td>Enclosed XRD (operator pos.)</td>
+                            <td><0.1 mrem/hr</td>
+                            <td>>50,000 hours</td>
+                        </tr>
+                        <tr>
+                            <td>Open-beam XRD (1 m, scattered)</td>
+                            <td>1-10 mR/hr</td>
+                            <td>500-5000 hours</td>
+                        </tr>
+                        <tr>
+                            <td>Primary beam (10 cm, Cu tube)</td>
+                            <td>10⁴-10⁵ R/hr</td>
+                            <td>0.2-2 seconds</td>
+                        </tr>
+                        <tr>
+                            <td>Primary beam (1 cm, Cu tube)</td>
+                            <td>10⁵-10⁶ R/hr</td>
+                            <td>0.02-0.2 seconds</td>
+                        </tr>
+                    </table>
+
+                    <div class="warning-box">
+                        <strong>CRITICAL POINT:</strong> A direct beam from a typical XRD instrument can deliver the annual occupational dose limit in 0.2 seconds and a potentially fatal dose (500 rem) in under 2 seconds. This is why interlock systems and procedural controls are absolutely essential.
+                    </div>
+                </div>
+            </div>
+
+            <div class="training-section hidden" id="section-5">
+                <h3>5. Safety Features of X-Ray Equipment</h3>
+                <div class="content">
+                    <h4>Engineered Safety Controls - Detailed Technical Specifications</h4>
+                    
+                    <h5>Primary Shielding Design:</h5>
+                    <p><strong>Half-Value Layers for Common Materials (Cu Kα, 8.04 keV):</strong></p>
+                    <table>
+                        <tr>
+                            <th>Material</th>
+                            <th>HVL (mm)</th>
+                            <th>Tenth-Value Layer (mm)</th>
+                        </tr>
+                        <tr>
+                            <td>Lead</td>
+                            <td>0.03</td>
+                            <td>0.10</td>
+                        </tr>
+                        <tr>
+                            <td>Steel</td>
+                            <td>0.35</td>
+                            <td>1.16</td>
+                        </tr>
+                        <tr>
+                            <td>Aluminum</td>
+                            <td>2.8</td>
+                            <td>9.3</td>
+                        </tr>
+                        <tr>
+                            <td>Concrete</td>
+                            <td>18</td>
+                            <td>60</td>
+                        </tr>
+                    </table>
+
+                    <p><strong>Typical Enclosure Shielding:</strong></p>
+                    <ul>
+                        <li>Cabinet XRD systems: 1-2 mm lead equivalent</li>
+                        <li>XRF analyzers: 1-3 mm lead equivalent</li>
+                        <li>Rotating anode systems: 3-6 mm lead equivalent</li>
+                    </ul>
+
+                    <h4>Safety Interlock Systems - Redundancy and Fail-Safe Design</h4>
+                    
+                    <h5>Interlock Functional Requirements (ANSI N43.2):</h5>
+                    <ul>
+                        <li><strong>Redundant Interlock Requirement:</strong> Minimum of TWO independent interlocks required for personnel safety</li>
+                        <li>Each interlock must independently prevent X-ray generation</li>
+                        <li>Interlocks must be fail-safe (power loss = beam off)</li>
+                        <li>Single-point failure shall not allow hazardous condition</li>
+                    </ul>
+
+                    <h5>Types of Interlocks:</h5>
+                    <ul>
+                        <li><strong>Hard-wired Interlocks (Primary):</strong>
+                            <ul>
+                                <li>Direct electrical circuit interruption</li>
+                                <li>Independent of software control</li>
+                                <li>Break high-voltage or filament circuit</li>
+                                <li>Response time: <10 milliseconds</li>
+                            </ul>
+                        </li>
+                        <li><strong>Monitored Interlocks:</strong>
+                            <ul>
+                                <li>Position switches with status monitoring</li>
+                                <li>PLC or control system verification</li>
+                                <li>Alarm generation on fault</li>
+                            </ul>
+                        </li>
+                        <li><strong>Trapped-key Interlocks:</strong>
+                            <ul>
+                                <li>Physical key exchange system</li>
+                                <li>Beam operation key cannot be removed unless enclosure locked</li>
+                                <li>Provides positive physical assurance</li>
+                            </ul>
+                        </li>
+                    </ul>
+
+                    <h4>Beam Shutters and Attenuators</h4>
+                    <ul>
+                        <li><strong>Primary Shutter Design:</strong> Material: Lead (5-10 mm typical) or tungsten</li>
+                        <li><strong>Fail-safe position:</strong> CLOSED (beam blocked)</li>
+                        <li><strong>Status indication:</strong> Physical position sensors (2 independent)</li>
+                        <li><strong>Automatic shutter closure on:</strong> Enclosure opening, system fault, emergency stop, power failure</li>
+                    </ul>
+
+                    <h4>Warning and Indication Systems</h4>
+                    
+                    <h5>Visual Warning Requirements:</h5>
+                    <ul>
+                        <li><strong>Primary X-Ray Warning Light:</strong>
+                            <ul>
+                                <li>Color: RED (per ANSI N43.2)</li>
+                                <li>Label: "X-RAYS ON" or "RADIATION"</li>
+                                <li>Location: Visible from all access points</li>
+                                <li>Activation: Whenever high voltage is applied to tube</li>
+                            </ul>
+                        </li>
+                    </ul>
+
+                    <h5>Warning Labels and Placards:</h5>
+                    <ul>
+                        <li><strong>Required Radiation Symbol (Trefoil):</strong> Magenta or purple on yellow background</li>
+                        <li><strong>Standard Caution Label:</strong> "CAUTION: X-RAY RADIATION - THIS EQUIPMENT PRODUCES X-RAYS WHEN ENERGIZED"</li>
+                        <li><strong>Supplementary Information:</strong> Maximum tube voltage and current, RSO contact, emergency procedures</li>
+                    </ul>
+
+                    <h4>Administrative Safety Controls</h4>
+                    
+                    <h5>Pre-Operational Safety Checklist:</h5>
+                    <ul>
+                        <li>☐ Completed required training and authorized by RSO</li>
+                        <li>☐ Verified all interlocks functional (test each door/panel)</li>
+                        <li>☐ Confirmed warning lights operational</li>
+                        <li>☐ Inspected enclosure for damage or modifications</li>
+                        <li>☐ Verified shutter closed before opening enclosure</li>
+                        <li>☐ Reviewed instrument-specific procedures</li>
+                        <li>☐ Confirmed no unauthorized modifications</li>
+                        <li>☐ Checked radiation survey meter available and calibrated</li>
+                    </ul>
+
+                    <h5>Interlock Testing Protocol:</h5>
+                    <p><strong>Frequency:</strong></p>
+                    <ul>
+                        <li>Daily: Visual inspection of interlocks and warning lights</li>
+                        <li>Quarterly: Functional test of each interlock</li>
+                        <li>Annually: Comprehensive safety inspection by qualified personnel</li>
+                    </ul>
+
+                    <p><strong>Quarterly Interlock Test Procedure:</strong></p>
+                    <ol>
+                        <li>Verify X-ray tube is off and cooled</li>
+                        <li>Close all enclosure doors/panels</li>
+                        <li>Attempt to energize X-ray tube</li>
+                        <li>Verify warning light illuminates</li>
+                        <li>Open each door/panel sequentially</li>
+                        <li>Verify X-ray generation immediately ceases</li>
+                        <li>Verify warning light extinguishes</li>
+                        <li>Repeat for all interlocks</li>
+                        <li>Document results in maintenance log</li>
+                        <li>Report any anomalies to RSO immediately</li>
+                    </ol>
+
+                    <p><strong>Acceptance Criteria:</strong></p>
+                    <ul>
+                        <li>X-ray generation must cease within 10 milliseconds of interlock opening</li>
+                        <li>No residual X-ray production (verify with survey meter)</li>
+                        <li>Warning lights must accurately reflect X-ray status</li>
+                        <li>Beam cannot be re-energized until interlock restored</li>
+                    </ul>
+
+                    <div class="danger-box">
+                        <strong>CRITICAL POINT:</strong> Safety interlocks are the PRIMARY defense against X-ray exposure. Any modification, bypass, or defeat of interlocks transforms a safe instrument into an immediately life-threatening hazard. Under NO circumstances is interlock defeat justified, even temporarily for troubleshooting or alignment. Interlock tampering may result in immediate loss of authorization, regulatory violations and fines, criminal liability in case of injury, and institutional liability.
+                    </div>
+                </div>
+            </div>
+
+            <div class="training-section hidden" id="section-6">
+                <h3>6. Safe Operating Procedures</h3>
+                <div class="content">
+                    <h4>Before Operating X-Ray Equipment</h4>
+                    <ul>
+                        <li>Complete required safety training</li>
+                        <li>Verify all safety interlocks are functional</li>
+                        <li>Check that warning lights are operational</li>
+                        <li>Ensure enclosures and shielding are intact</li>
+                        <li>Review instrument-specific procedures</li>
+                        <li>Verify you are authorized to operate the equipment</li>
+                    </ul>
+
+                    <h4>During Operation</h4>
+                    <ul>
+                        <li>Never open enclosures while X-rays are on</li>
+                        <li>Keep hands and body parts away from the primary beam path</li>
+                        <li>Use beam stops and shutters when not actively measuring</li>
+                        <li>Monitor warning lights and indicators</li>
+                        <li>Follow sample loading/unloading procedures exactly</li>
+                        <li>Never attempt to view the X-ray beam</li>
+                    </ul>
+
+                    <h4>After Operation</h4>
+                    <ul>
+                        <li>Properly shut down the X-ray generator</li>
+                        <li>Close beam shutters</li>
+                        <li>Remove and secure keys if applicable</li>
+                        <li>Log usage in instrument logbook</li>
+                        <li>Report any equipment malfunctions immediately</li>
+                    </ul>
+
+                    <div class="info-box">
+                        <strong>Best Practice:</strong> Always assume the X-ray beam is on unless you have personally verified it is off.
+                    </div>
+                </div>
+            </div>
+
+            <div class="training-section hidden" id="section-7">
+                <h3>7. Hazard Recognition and Control</h3>
+                <div class="content">
+                    <h4>Three Fundamental Principles of Radiation Protection</h4>
+                    
+                    <h5>PRINCIPLE 1: TIME</h5>
+                    <p>Minimize exposure duration to reduce total dose received.</p>
+                    <p><strong>Dose-Time Relationship:</strong> Total Dose = Dose Rate × Time</p>
+                    
+                    <p><strong>Example Quantitative Analysis:</strong></p>
+                    <ul>
+                        <li>Scenario: Sample alignment near scatter source</li>
+                        <li>Dose rate at work position: 50 mR/hr</li>
+                        <li>Time to receive annual limit (5 rem = 5000 mR): 100 hours</li>
+                        <li>Time to receive quarterly limit (1250 mR): 25 hours</li>
+                    </ul>
+                    
+                    <p><strong>By reducing time from 30 min to 15 min per alignment:</strong></p>
+                    <ul>
+                        <li>Dose reduction: 50% immediately</li>
+                        <li>Annual dose if weekly alignments (30 min): 1300 mR</li>
+                        <li>Annual dose if weekly alignments (15 min): 650 mR</li>
+                    </ul>
+
+                    <p><strong>Practical Time Minimization Strategies:</strong></p>
+                    <ul>
+                        <li><strong>Work Planning:</strong> Prepare tools and materials before approaching radiation area; review procedures thoroughly beforehand</li>
+                        <li><strong>Efficiency Optimization:</strong> Automate repetitive operations; use programmable sample changers</li>
+                        <li><strong>Remote Operation:</strong> Computer-controlled sample positioning; video monitoring for sample visualization</li>
+                        <li><strong>Dose Budgeting:</strong> Allocate time for dose-intensive operations; monitor accumulated dose vs. time estimates</li>
+                    </ul>
+
+                    <h5>PRINCIPLE 2: DISTANCE</h5>
+                    <p>Maximize distance from radiation source to reduce exposure.</p>
+                    <p><strong>Inverse Square Law:</strong> I(r) = I₀ × (r₀/r)²</p>
+                    
+                    <p><strong>Example 1: Primary Beam Intensity vs. Distance</strong></p>
+                    <p>Primary beam at 1 cm from focus: 10⁶ R/hr</p>
+                    <table>
+                        <tr>
+                            <th>Distance (cm)</th>
+                            <th>Intensity (R/hr)</th>
+                            <th>Annual Limit Time</th>
+                        </tr>
+                        <tr>
+                            <td>1</td>
+                            <td>10⁶</td>
+                            <td>0.018 sec</td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>2.5 × 10⁵</td>
+                            <td>0.072 sec</td>
+                        </tr>
+                        <tr>
+                            <td>5</td>
+                            <td>4 × 10⁴</td>
+                            <td>0.45 sec</td>
+                        </tr>
+                        <tr>
+                            <td>10</td>
+                            <td>10⁴</td>
+                            <td>1.8 sec</td>
+                        </tr>
+                        <tr>
+                            <td>50</td>
+                            <td>400</td>
+                            <td>45 sec</td>
+                        </tr>
+                        <tr>
+                            <td>100</td>
+                            <td>100</td>
+                            <td>3 min</td>
+                        </tr>
+                    </table>
+                    <p><strong>Key Point:</strong> Doubling distance → dose rate reduced to 25%; 10× distance → dose rate reduced to 1%</p>
+
+                    <p><strong>Practical Distance Maximization:</strong></p>
+                    <ul>
+                        <li><strong>Workspace Design:</strong> Control console separated from instrument; minimum approach distance marked on floor</li>
+                        <li><strong>Sample Handling:</strong> Use long-handled tools for sample mounting; never lean over enclosure during operation</li>
+                        <li><strong>Scatter Minimization:</strong> Proper collimation reduces scatter production; position body perpendicular to beam</li>
+                    </ul>
+
+                    <h5>PRINCIPLE 3: SHIELDING</h5>
+                    <p>Interpose absorbing material between source and operator.</p>
+                    <p><strong>Exponential Attenuation:</strong> I(x) = I₀ × e<sup>(-μx)</sup></p>
+                    
+                    <p><strong>Example: Lead Shielding for Cu Kα</strong></p>
+                    <ul>
+                        <li>Initial intensity: 1000 R/hr</li>
+                        <li>Shield thickness: 0.5 mm lead</li>
+                        <li>Result: Essentially complete attenuation</li>
+                        <li>For 99% reduction: Only 0.043 mm lead needed</li>
+                        <li>Practical shield: 0.1 mm lead provides >99.99% reduction</li>
+                    </ul>
+
+                    <p><strong>Practical Shielding Applications:</strong></p>
+                    <ul>
+                        <li><strong>Permanent Shielding:</strong> Instrument enclosure, beam tube shielding - never modify or remove</li>
+                        <li><strong>Portable Shielding:</strong> Lead brick barriers, lead-acrylic panels for viewing</li>
+                        <li><strong>Shielding Integrity Verification:</strong> Annual inspection; radiation surveys detect gaps</li>
+                    </ul>
+
+                    <h4>Hazard Recognition - Identifying Dangerous Situations</h4>
+                    
+                    <h5>CATEGORY 1: Equipment Malfunctions</h5>
+                    <p><strong>Interlock Failure Indicators:</strong></p>
+                    <ul>
+                        <li>X-ray warning light remains on when door opened</li>
+                        <li>Ability to energize X-rays with enclosure open</li>
+                        <li>Intermittent interlock function</li>
+                        <li>Visible damage to interlock switches or actuators</li>
+                        <li>Warning light fails to illuminate when X-rays generated</li>
+                    </ul>
+                    
+                    <p><strong>Immediate Actions:</strong></p>
+                    <ol>
+                        <li>Do NOT open enclosure if warning light on</li>
+                        <li>Turn off X-ray generator at main power</li>
+                        <li>Post "DO NOT OPERATE" sign</li>
+                        <li>Immediately notify RSO</li>
+                        <li>Do not resume operations until repaired and tested</li>
+                    </ol>
+
+                    <h5>CATEGORY 2: Procedural Violations</h5>
+                    <p><strong>High-Risk Behaviors:</strong></p>
+                    <ul>
+                        <li>Operating equipment without completed training</li>
+                        <li>Bypassing or defeating interlocks "temporarily"</li>
+                        <li>Working on equipment with power on</li>
+                        <li>Alignment procedures without proper tools/shielding</li>
+                        <li>Using equipment with known malfunctions</li>
+                        <li>Unauthorized modifications or repairs</li>
+                    </ul>
+
+                    <h5>CATEGORY 3: Beam Alignment Hazards</h5>
+                    <p><strong>Alignment is inherently hazardous and requires special procedures:</strong></p>
+                    <ul>
+                        <li><strong>Controls:</strong> Reduce tube power to minimum; install beam attenuators; use remote viewing (cameras, fluorescent screens)</li>
+                        <li><strong>Two-person rule:</strong> One monitoring, one working</li>
+                        <li><strong>Use radiation survey meter continuously</strong></li>
+                        <li><strong>NEVER:</strong> Place any body part in primary beam path; attempt to "see" the X-ray beam; use hands to check beam position</li>
+                    </ul>
+
+                    <h4>Practical Hazard Case Studies</h4>
+                    
+                    <h5>CASE STUDY 1: Hand Exposure During Sample Loading</h5>
+                    <p><strong>Scenario:</strong> Operator loading powder sample, becomes distracted, forgets X-ray generator is energized. Interlock has been bypassed (unauthorized). Hand enters primary beam for 2 seconds.</p>
+                    
+                    <p><strong>Analysis:</strong></p>
+                    <ul>
+                        <li>Tube: 40 kV, 40 mA (Cu Kα)</li>
+                        <li>Primary beam intensity: ~5 × 10⁵ R/hr</li>
+                        <li>Distance: 5 cm from focal spot</li>
+                        <li>Corrected intensity: 2 × 10⁴ R/hr</li>
+                        <li>Dose = 2 × 10⁴ R/hr × (2/3600 hr) = 11.1 R ≈ 11 Gy to hand</li>
+                    </ul>
+                    
+                    <p><strong>Predicted Effects:</strong></p>
+                    <ul>
+                        <li>Main erythema in 7-14 days</li>
+                        <li>Possible dry desquamation</li>
+                        <li>Moist desquamation likely</li>
+                        <li>Pain, swelling, possible blistering</li>
+                        <li>Medical follow-up required</li>
+                    </ul>
+                    
+                    <p><strong>Lessons:</strong> NEVER bypass interlocks; always verify generator is off before opening; interlock defeat transformed safe instrument to serious injury</p>
+
+                    <h5>CASE STUDY 2: Chronic Low-Level Exposure from Shielding Defect</h5>
+                    <p><strong>Scenario:</strong> XRF system develops crack in lead shielding (1 mm wide, 2 cm long). Operator works at console 50 cm from crack for 4 hours/day. Condition persists for 6 months before quarterly survey detects it.</p>
+                    
+                    <p><strong>Analysis:</strong></p>
+                    <ul>
+                        <li>Dose rate at operator: 40 mR/hr</li>
+                        <li>Daily exposure: 40 mR/hr × 4 hr = 160 mR/day</li>
+                        <li>6-month exposure: 160 × 5 × 26 = 20,800 mR ≈ 21 rem</li>
+                        <li><strong>This exceeds annual occupational limit (5 rem) by factor of 4</strong></li>
+                    </ul>
+                    
+                    <p><strong>Lessons:</strong> Regular inspection and surveys detect degradation; small defects can produce significant exposures; importance of trending dose data</p>
+
+                    <div class="warning-box">
+                        <strong>Remember:</strong> You cannot see, hear, or feel X-rays. Always rely on safety systems and procedures. The difference between safe operation and serious injury is measured in milliseconds for laboratory X-ray systems.
+                    </div>
+                </div>
+            </div>
+
+            <div class="training-section hidden" id="section-8">
+                <h3>8. Emergency Procedures</h3>
+                <div class="content">
+                    <h4>Suspected Overexposure</h4>
+                    <p>If you suspect you or someone else has been exposed to X-rays:</p>
+                    <ol>
+                        <li><strong>Immediately turn off the X-ray generator</strong></li>
+                        <li>Move away from the equipment</li>
+                        <li>Notify your supervisor immediately</li>
+                        <li>Contact the Radiation Safety Officer (RSO)</li>
+                        <li>Seek medical attention if advised</li>
+                        <li>Document the incident in detail</li>
+                        <li>Do not resume operations until cleared by RSO</li>
+                    </ol>
+
+                    <h4>Equipment Malfunction</h4>
+                    <ul>
+                        <li>Shut down the system immediately</li>
+                        <li>Post "DO NOT OPERATE" sign on equipment</li>
+                        <li>Notify supervisor and RSO</li>
+                        <li>Document the malfunction</li>
+                        <li>Do not attempt repairs unless authorized</li>
+                    </ul>
+
+                    <h4>Interlock Failure</h4>
+                    <p>If an interlock fails to shut off X-rays when opened:</p>
+                    <ul>
+                        <li>Do not open the enclosure further</li>
+                        <li>Use emergency stop button if available</li>
+                        <li>Turn off power at the main switch</li>
+                        <li>Evacuate the area</li>
+                        <li>Post warning signs</li>
+                        <li>Immediately report to RSO</li>
+                    </ul>
+
+                    <h4>Important Contacts</h4>
+                    <div class="contact-box">
+                        <p><strong>Radiation Safety Officer:</strong> [Insert contact info]</p>
+                        <p><strong>Emergency:</strong> 911</p>
+                        <p><strong>Supervisor:</strong> [Insert contact info]</p>
+                    </div>
+
+                    <div class="danger-box">
+                        <strong>NEVER:</strong> Attempt to repair or modify X-ray equipment unless you are specifically trained and authorized.
+                    </div>
+                </div>
+            </div>
+
+            <div class="training-section hidden" id="section-9">
+                <h3>9. Regulatory Requirements and Responsibilities</h3>
+                <div class="content">
+                    <h4>Regulatory Framework</h4>
+                    <ul>
+                        <li><strong>DOE:</strong> Department of Energy regulations for federal facilities</li>
+                        <li><strong>10 CFR 851:</strong> Worker Safety and Health Program</li>
+                        <li><strong>State Regulations:</strong> May have additional requirements</li>
+                        <li><strong>Institutional Policies:</strong> Your facility's specific rules</li>
+                    </ul>
+
+                    <h4>User Responsibilities</h4>
+                    <p>As an X-ray equipment operator, you must:</p>
+                    <ul>
+                        <li>Complete required safety training before operation</li>
+                        <li>Retake training every 2 years (or as required)</li>
+                        <li>Follow all safety procedures and protocols</li>
+                        <li>Report equipment malfunctions immediately</li>
+                        <li>Report any suspected overexposures</li>
+                        <li>Never bypass or defeat safety systems</li>
+                        <li>Maintain training documentation</li>
+                        <li>Participate in safety audits and inspections</li>
+                    </ul>
+
+                    <h4>Supervisor Responsibilities</h4>
+                    <ul>
+                        <li>Ensure operators are properly trained</li>
+                        <li>Maintain equipment in safe operating condition</li>
+                        <li>Conduct regular safety inspections</li>
+                        <li>Investigate incidents and near-misses</li>
+                        <li>Maintain training and exposure records</li>
+                    </ul>
+
+                    <h4>Radiation Safety Officer (RSO) Responsibilities</h4>
+                    <ul>
+                        <li>Oversee radiation safety program</li>
+                        <li>Approve equipment and procedures</li>
+                        <li>Conduct safety audits</li>
+                        <li>Investigate exposures and incidents</li>
+                        <li>Maintain regulatory compliance</li>
+                        <li>Provide technical guidance</li>
+                    </ul>
+
+                    <div class="info-box">
+                        <strong>Training Requirement:</strong> This training must be renewed every 2 years to maintain authorization.
+                    </div>
+                </div>
+            </div>
+
+            <div class="training-section hidden" id="section-10">
+                <h3>10. Final Review and Best Practices</h3>
+                <div class="content">
+                    <h4>Key Safety Points to Remember</h4>
+                    <ul>
+                        <li>✓ X-rays are invisible ionizing radiation that can cause serious harm</li>
+                        <li>✓ Always follow the ALARA principle</li>
+                        <li>✓ Never bypass or defeat safety interlocks</li>
+                        <li>✓ Verify X-rays are off before opening enclosures</li>
+                        <li>✓ Use Time, Distance, and Shielding to minimize exposure</li>
+                        <li>✓ Report all malfunctions and incidents immediately</li>
+                        <li>✓ Complete training renewal every 2 years</li>
+                    </ul>
+
+                    <h4>Best Practices Checklist</h4>
+                    <div class="checklist">
+                        <p>Before each use:</p>
+                        <ul>
+                            <li>☐ Verify safety interlocks are functional</li>
+                            <li>☐ Check warning lights operate correctly</li>
+                            <li>☐ Inspect shielding for damage</li>
+                            <li>☐ Review instrument-specific procedures</li>
+                            <li>☐ Ensure you are authorized to operate</li>
+                        </ul>
+                    </div>
+
+                    <h4>When in Doubt</h4>
+                    <p>If you are ever unsure about:</p>
+                    <ul>
+                        <li>Whether a procedure is safe</li>
+                        <li>How to operate equipment properly</li>
+                        <li>Whether equipment is functioning correctly</li>
+                        <li>What to do in an unusual situation</li>
+                    </ul>
+                    <p><strong>STOP and contact your supervisor or the Radiation Safety Officer before proceeding.</strong></p>
+
+                    <div class="info-box">
+                        <p>You have completed all training sections. Click "Next" to proceed to the final quiz.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="training-section hidden" id="quiz-section">
+                <h3>Final Assessment Quiz</h3>
+                <div class="content">
+                    <div class="info-box">
+                        <p><strong>Instructions:</strong> Answer all 10 questions below. You must score 100% to complete the training. You may retake the quiz as many times as needed. Feedback will be provided for incorrect answers.</p>
+                    </div>
+
+                    <div id="quiz-questions">
+                        <!-- Question 1 -->
+                        <div class="quiz-question" data-question="1">
+                            <h4>Question 1:</h4>
+                            <p>What is the approximate time it takes for a typical 40 kV, 40 mA Cu X-ray tube to deliver the annual occupational dose limit (5 rem) at the exit port?</p>
+                            <div class="quiz-options">
+                                <label><input type="radio" name="q1" value="a"> 3.6 seconds</label>
+                                <label><input type="radio" name="q1" value="b"> 0.036 seconds</label>
+                                <label><input type="radio" name="q1" value="c"> 36 seconds</label>
+                                <label><input type="radio" name="q1" value="d"> 0.36 seconds</label>
+                            </div>
+                            <div class="quiz-feedback hidden"></div>
+                        </div>
+
+                        <!-- Question 2 -->
+                        <div class="quiz-question" data-question="2">
+                            <h4>Question 2:</h4>
+                            <p>According to ANSI N43.2, what is the MINIMUM number of independent interlocks required for personnel safety on X-ray equipment?</p>
+                            <div class="quiz-options">
+                                <label><input type="radio" name="q2" value="a"> One</label>
+                                <label><input type="radio" name="q2" value="b"> Two</label>
+                                <label><input type="radio" name="q2" value="c"> Three</label>
+                                <label><input type="radio" name="q2" value="d"> Four</label>
+                            </div>
+                            <div class="quiz-feedback hidden"></div>
+                        </div>
+
+                        <!-- Question 3 -->
+                        <div class="quiz-question" data-question="3">
+                            <h4>Question 3:</h4>
+                            <p>What does the ALARA principle stand for?</p>
+                            <div class="quiz-options">
+                                <label><input type="radio" name="q3" value="a"> Always Limit All Radiation Annually</label>
+                                <label><input type="radio" name="q3" value="b"> As Low As Reasonably Achievable</label>
+                                <label><input type="radio" name="q3" value="c"> Avoid Long-term And Repeated Absorption</label>
+                                <label><input type="radio" name="q3" value="d"> Annual Limits Are Regulatory Absolutes</label>
+                            </div>
+                            <div class="quiz-feedback hidden"></div>
+                        </div>
+
+                        <!-- Question 4 -->
+                        <div class="quiz-question" data-question="4">
+                            <h4>Question 4:</h4>
+                            <p>If you double your distance from a point X-ray source, the radiation intensity is reduced to:</p>
+                            <div class="quiz-options">
+                                <label><input type="radio" name="q4" value="a"> 1/2 (50%)</label>
+                                <label><input type="radio" name="q4" value="b"> 1/4 (25%)</label>
+                                <label><input type="radio" name="q4" value="c"> 1/8 (12.5%)</label>
+                                <label><input type="radio" name="q4" value="d"> 1/16 (6.25%)</label>
+                            </div>
+                            <div class="quiz-feedback hidden"></div>
+                        </div>
+
+                        <!-- Question 5 -->
+                        <div class="quiz-question" data-question="5">
+                            <h4>Question 5:</h4>
+                            <p>What is the annual occupational dose limit for extremities (hands and feet) according to DOE 10 CFR 835?</p>
+                            <div class="quiz-options">
+                                <label><input type="radio" name="q5" value="a"> 5 rem (50 mSv)</label>
+                                <label><input type="radio" name="q5" value="b"> 15 rem (150 mSv)</label>
+                                <label><input type="radio" name="q5" value="c"> 50 rem (500 mSv)</label>
+                                <label><input type="radio" name="q5" value="d"> 100 rem (1000 mSv)</label>
+                            </div>
+                            <div class="quiz-feedback hidden"></div>
+                        </div>
+
+                        <!-- Question 6 -->
+                        <div class="quiz-question" data-question="6">
+                            <h4>Question 6:</h4>
+                            <p>Which type of radiation damage accounts for approximately 70% of total biological damage from X-rays?</p>
+                            <div class="quiz-options">
+                                <label><input type="radio" name="q6" value="a"> Direct DNA strand breaks</label>
+                                <label><input type="radio" name="q6" value="b"> Indirect damage from free radicals</label>
+                                <label><input type="radio" name="q6" value="c"> Protein denaturation</label>
+                                <label><input type="radio" name="q6" value="d"> Cell membrane disruption</label>
+                            </div>
+                            <div class="quiz-feedback hidden"></div>
+                        </div>
+
+                        <!-- Question 7 -->
+                        <div class="quiz-question" data-question="7">
+                            <h4>Question 7:</h4>
+                            <p>Under what circumstances is it acceptable to bypass or defeat safety interlocks on X-ray equipment?</p>
+                            <div class="quiz-options">
+                                <label><input type="radio" name="q7" value="a"> During routine maintenance</label>
+                                <label><input type="radio" name="q7" value="b"> When alignment procedures require it</label>
+                                <label><input type="radio" name="q7" value="c"> If supervised by the RSO</label>
+                                <label><input type="radio" name="q7" value="d"> Never - it is never acceptable</label>
+                            </div>
+                            <div class="quiz-feedback hidden"></div>
+                        </div>
+
+                        <!-- Question 8 -->
+                        <div class="quiz-question" data-question="8">
+                            <h4>Question 8:</h4>
+                            <p>What is the threshold dose for main erythema (skin reddening) from acute X-ray exposure?</p>
+                            <div class="quiz-options">
+                                <label><input type="radio" name="q8" value="a"> 2 Gy (200 rad)</label>
+                                <label><input type="radio" name="q8" value="b"> 6 Gy (600 rad)</label>
+                                <label><input type="radio" name="q8" value="c"> 10 Gy (1000 rad)</label>
+                                <label><input type="radio" name="q8" value="d"> 15 Gy (1500 rad)</label>
+                            </div>
+                            <div class="quiz-feedback hidden"></div>
+                        </div>
+
+                        <!-- Question 9 -->
+                        <div class="quiz-question" data-question="9">
+                            <h4>Question 9:</h4>
+                            <p>How often must interlock functional tests be performed according to best practices?</p>
+                            <div class="quiz-options">
+                                <label><input type="radio" name="q9" value="a"> Daily</label>
+                                <label><input type="radio" name="q9" value="b"> Weekly</label>
+                                <label><input type="radio" name="q9" value="c"> Quarterly</label>
+                                <label><input type="radio" name="q9" value="d"> Annually</label>
+                            </div>
+                            <div class="quiz-feedback hidden"></div>
+                        </div>
+
+                        <!-- Question 10 -->
+                        <div class="quiz-question" data-question="10">
+                            <h4>Question 10:</h4>
+                            <p>For a properly functioning, enclosed XRD/XRF system, what should the operator's annual dose be?</p>
+                            <div class="quiz-options">
+                                <label><input type="radio" name="q10" value="a"> Less than 1 rem</label>
+                                <label><input type="radio" name="q10" value="b"> Less than 100 mrem</label>
+                                <label><input type="radio" name="q10" value="c"> Effectively zero (less than 10 mrem)</label>
+                                <label><input type="radio" name="q10" value="d"> Between 100-500 mrem</label>
+                            </div>
+                            <div class="quiz-feedback hidden"></div>
+                        </div>
+                    </div>
+
+                    <div id="quiz-results" class="hidden">
+                        <div id="quiz-score"></div>
+                        <button id="retake-quiz-btn" class="hidden">Retake Quiz</button>
+                    </div>
+
+                    <button id="submit-quiz-btn">Submit Quiz</button>
+                </div>
+            </div>
+
+            <div class="navigation">
+                <button id="prev-btn" class="hidden">Previous</button>
+                <button id="next-btn">Next</button>
+                <button id="complete-btn" class="hidden">Complete Training</button>
+            </div>
+        </div>
+
+        <div id="completion-section" class="section hidden">
+            <div class="success-box">
+                <h3>✓ Training Complete</h3>
+                <p>Thank you for completing the X-Ray Safety Training module.</p>
+                <p><strong>Email:</strong> <span id="completion-email"></span></p>
+                <p><strong>Completion Date:</strong> <span id="completion-date"></span></p>
+                <p><strong>Next Training Due:</strong> <span id="next-training-date"></span></p>
+                <p>Your completion has been recorded. Please save this page or take a screenshot for your records.</p>
+                <button id="download-cert-btn">Download Completion Record</button>
+            </div>
+        </div>
+
+        <footer>
+            <p>Based on DOE X-Ray Safety Guidelines | Training valid for 2 years from completion date</p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
