@@ -400,7 +400,7 @@ function submitQuiz() {
     if (percentage === 100) {
         scoreDiv.innerHTML = `
             <div class="success-box">
-                <h4>🎉 Congratulations! You Passed!</h4>
+                <h4>Congratulations! You Passed!</h4>
                 <p><strong>Score: ${score}/${totalQuestions} (${percentage}%)</strong></p>
                 <p>You have successfully completed the X-Ray Safety Training quiz. Click "Complete Training" below to receive your certificate.</p>
             </div>
