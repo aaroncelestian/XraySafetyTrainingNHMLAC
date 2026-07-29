@@ -409,9 +409,12 @@ function initTheme() {
     applyTheme(theme);
 
     const toggle = document.getElementById('theme-toggle');
-    if (toggle) {
-        toggle.addEventListener('click', () => {
-            const next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    if (toggle && !toggle.dataset.bound) {
+        toggle.dataset.bound = '1';
+        toggle.addEventListener('click', (e) => {
+            e.preventDefault();
+            const current = document.documentElement.getAttribute('data-theme') || 'light';
+            const next = current === 'dark' ? 'light' : 'dark';
             applyTheme(next);
             localStorage.setItem('xrayTrainingTheme', next);
         });
@@ -419,12 +422,17 @@ function initTheme() {
 }
 
 function applyTheme(theme) {
-    document.documentElement.setAttribute('data-theme', theme);
+    const next = theme === 'dark' ? 'dark' : 'light';
+    document.documentElement.setAttribute('data-theme', next);
+    document.body && document.body.setAttribute('data-theme', next);
     const label = document.getElementById('theme-toggle-label');
     if (label) {
-        label.textContent = theme === 'dark' ? 'Light mode' : 'Dark mode';
+        label.textContent = next === 'dark' ? 'Light mode' : 'Dark mode';
     }
 }
+
+// Theme can init as soon as the toggle exists (script is at end of body)
+initTheme();
 
 function formatDate(date) {
     const options = {

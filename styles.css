@@ -1,10 +1,13 @@
 /* NHMLAC X-Ray Operator Training — professional light/dark theme */
 
-:root,
-[data-theme="light"] {
+:root {
     --font-sans: "IBM Plex Sans", "Segoe UI", sans-serif;
     --font-serif: "Source Serif 4", "Georgia", serif;
+    --radius: 6px;
+}
 
+html[data-theme="light"] {
+    color-scheme: light;
     --bg-page: #e8edf2;
     --bg-page-accent: #d4dde8;
     --bg-surface: #ffffff;
@@ -33,11 +36,11 @@
     --success-border: #2f7a4a;
 
     --shadow: 0 12px 40px rgba(26, 47, 69, 0.12);
-    --radius: 6px;
     --focus: #1f5c57;
 }
 
-[data-theme="dark"] {
+html[data-theme="dark"] {
+    color-scheme: dark;
     --bg-page: #0f1419;
     --bg-page-accent: #161d26;
     --bg-surface: #1a222c;
@@ -198,7 +201,11 @@ header h2 {
 #login-form input:focus {
     outline: none;
     border-color: var(--focus);
-    box-shadow: 0 0 0 3px color-mix(in srgb, var(--focus) 25%, transparent);
+    box-shadow: 0 0 0 3px rgba(31, 92, 87, 0.25);
+}
+
+html[data-theme="dark"] #login-form input:focus {
+    box-shadow: 0 0 0 3px rgba(90, 158, 151, 0.35);
 }
 
 button {
