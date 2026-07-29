@@ -1,17 +1,27 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>X-Ray Operator Safety Training — NHMLAC</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,600;8..60,700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+    <div class="theme-bar no-print">
+        <button type="button" id="theme-toggle" class="theme-toggle" aria-label="Toggle light and dark mode" title="Toggle theme">
+            <span class="theme-toggle-icon" aria-hidden="true">◐</span>
+            <span id="theme-toggle-label">Dark mode</span>
+        </button>
+    </div>
     <div class="container">
         <header>
+            <p class="org-label">Natural History Museum of Los Angeles County</p>
             <h1>X-Ray Operator Safety Training</h1>
             <h2>Rigaku R-AXIS RAPID · Proto AXRD · Horiba XGT-7200</h2>
-            <p class="subtitle">NHMLAC · ANSI N43.2 · California radiation machine rules · Institutional policy</p>
+            <p class="subtitle">ANSI N43.2 · California radiation machine rules · Institutional policy</p>
         </header>
 
         <div id="login-section" class="section">
@@ -978,14 +988,49 @@
         </div>
 
         <div id="completion-section" class="section hidden">
-            <div class="success-box">
-                <h3>✓ Training Complete</h3>
+            <div class="success-box no-print">
+                <h3>Training Complete</h3>
                 <p>Thank you for completing the NHMLAC X-Ray Operator Safety Training module.</p>
                 <p><strong>Email:</strong> <span id="completion-email"></span></p>
                 <p><strong>Completion Date:</strong> <span id="completion-date"></span></p>
-                <p><strong>Next Training Due:</strong> <span id="next-training-date"></span></p>
-                <p>Your completion has been recorded. Save this page or download the completion record.</p>
-                <button id="download-cert-btn">Download Completion Record</button>
+                <p><strong>Valid Through:</strong> <span id="next-training-date"></span></p>
+            </div>
+
+            <div id="certificate" class="certificate" aria-label="Training certificate">
+                <div class="certificate-border">
+                    <p class="certificate-org">Natural History Museum of Los Angeles County</p>
+                    <p class="certificate-label">Certificate of Completion</p>
+                    <h2 class="certificate-title">X-Ray Operator Safety Training</h2>
+                    <p class="certificate-instruments">Rigaku R-AXIS RAPID · Proto AXRD · Horiba XGT-7200</p>
+                    <p class="certificate-awarded">This certifies that</p>
+                    <p class="certificate-name" id="cert-name">—</p>
+                    <p class="certificate-body">has successfully completed operator safety training for analytical X-ray diffraction and fluorescence instruments, including the final assessment at 100%.</p>
+                    <div class="certificate-meta">
+                        <div>
+                            <span class="meta-label">Completed</span>
+                            <span id="cert-completed">—</span>
+                        </div>
+                        <div>
+                            <span class="meta-label">Valid through</span>
+                            <span id="cert-valid">—</span>
+                        </div>
+                        <div>
+                            <span class="meta-label">Validity period</span>
+                            <span>2 years from completion</span>
+                        </div>
+                    </div>
+                    <p class="certificate-footnote">Based on ANSI N43.2 and institutional radiation safety policy. Authorization to operate remains subject to RSO approval.</p>
+                </div>
+            </div>
+
+            <div class="completion-actions no-print">
+                <button type="button" id="print-cert-btn">Print / Save Certificate (PDF)</button>
+                <button type="button" id="download-ics-btn" class="btn-secondary">Add Retraining Reminder to Calendar</button>
+                <button type="button" id="download-cert-btn" class="btn-secondary">Download JSON Record</button>
+            </div>
+
+            <div class="info-box no-print record-help">
+                <p><strong>Where is the JSON record?</strong> It is saved only in <em>this browser</em> (localStorage) on the computer used for training. It is <strong>not</strong> uploaded to GitHub or iCloud automatically. Use <strong>Download JSON Record</strong> and email or file the download with your supervisor. On this machine you can also run <code>viewAllTrainingRecords()</code> or <code>downloadAllRecords()</code> in the browser console.</p>
             </div>
         </div>
 

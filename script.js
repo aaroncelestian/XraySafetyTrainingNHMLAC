@@ -40,6 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initScenarioToggles();
     initInstrumentTabs();
     initFinalChecklist();
+    initTheme();
     updateNextButtonState();
 });
 
@@ -238,19 +239,26 @@ function initFinalChecklist() {
     refresh();
 }
 
+let lastCompletionDate = null;
+let lastValidThrough = null;
+
 function completeTraining() {
     const completionDate = new Date();
     const nextTrainingDate = new Date(completionDate);
     nextTrainingDate.setFullYear(nextTrainingDate.getFullYear() + 2);
+    lastCompletionDate = completionDate;
+    lastValidThrough = nextTrainingDate;
 
     const trainingRecord = {
         email: userEmail,
         completionDate: completionDate.toISOString(),
         nextTrainingDue: nextTrainingDate.toISOString(),
+        validThrough: nextTrainingDate.toISOString(),
         startTime: startTime.toISOString(),
         duration: Math.round((completionDate - startTime) / 1000 / 60),
         instruments: ['Rigaku R-AXIS RAPID', 'Proto AXRD', 'Horiba XGT-7200'],
-        module: 'NHMLAC X-Ray Operator Safety Training'
+        module: 'NHMLAC X-Ray Operator Safety Training',
+        validityYears: 2
     };
 
     saveTrainingRecord(trainingRecord);
@@ -258,9 +266,16 @@ function completeTraining() {
     trainingContent.classList.add('hidden');
     completionSection.classList.remove('hidden');
 
+    const completedText = formatDate(completionDate);
+    const validText = formatDateShort(nextTrainingDate);
+
     document.getElementById('completion-email').textContent = userEmail;
-    document.getElementById('completion-date').textContent = formatDate(completionDate);
-    document.getElementById('next-training-date').textContent = formatDate(nextTrainingDate);
+    document.getElementById('completion-date').textContent = completedText;
+    document.getElementById('next-training-date').textContent = validText;
+
+    document.getElementById('cert-name').textContent = userEmail;
+    document.getElementById('cert-completed').textContent = completedText;
+    document.getElementById('cert-valid').textContent = validText;
 
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
@@ -298,6 +313,118 @@ document.getElementById('download-cert-btn').addEventListener('click', () => {
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
 });
+
+document.getElementById('download-ics-btn').addEventListener('click', downloadRetrainingIcs);
+document.getElementById('print-cert-btn').addEventListener('click', printCertificate);
+
+function formatDateShort(date) {
+    return date.toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+    });
+}
+
+function pad2(n) {
+    return String(n).padStart(2, '0');
+}
+
+function toIcsDate(date) {
+    return (
+        date.getUTCFullYear() +
+        pad2(date.getUTCMonth() + 1) +
+        pad2(date.getUTCDate()) +
+        'T' +
+        pad2(date.getUTCHours()) +
+        pad2(date.getUTCMinutes()) +
+        pad2(date.getUTCSeconds()) +
+        'Z'
+    );
+}
+
+function downloadRetrainingIcs() {
+    if (!lastValidThrough) {
+        alert('Complete training first to generate a calendar reminder.');
+        return;
+    }
+
+    const start = new Date(lastValidThrough);
+    start.setHours(9, 0, 0, 0);
+    const end = new Date(start);
+    end.setHours(10, 0, 0, 0);
+
+    const uid = `xray-retrain-${start.getTime()}@nhmlac`;
+    const stamp = toIcsDate(new Date());
+    const dtStart = toIcsDate(start);
+    const dtEnd = toIcsDate(end);
+    const completedNote = lastCompletionDate ? formatDateShort(lastCompletionDate) : 'N/A';
+
+    const ics = [
+        'BEGIN:VCALENDAR',
+        'VERSION:2.0',
+        'PRODID:-//NHMLAC//X-Ray Operator Safety Training//EN',
+        'CALSCALE:GREGORIAN',
+        'METHOD:PUBLISH',
+        'BEGIN:VEVENT',
+        `UID:${uid}`,
+        `DTSTAMP:${stamp}`,
+        `DTSTART:${dtStart}`,
+        `DTEND:${dtEnd}`,
+        'SUMMARY:NHMLAC X-Ray Operator Safety Retraining Due',
+        `DESCRIPTION:X-Ray Operator Safety Training expires / retraining due. Original completion: ${completedNote}. Instruments: Rigaku R-AXIS RAPID, Proto AXRD, Horiba XGT-7200. Complete the training module again before operating.`,
+        'LOCATION:NHMLAC X-ray Lab',
+        'BEGIN:VALARM',
+        'TRIGGER:-P30D',
+        'ACTION:DISPLAY',
+        'DESCRIPTION:Reminder: X-ray operator retraining due in 30 days',
+        'END:VALARM',
+        'BEGIN:VALARM',
+        'TRIGGER:-P7D',
+        'ACTION:DISPLAY',
+        'DESCRIPTION:Reminder: X-ray operator retraining due in 7 days',
+        'END:VALARM',
+        'END:VEVENT',
+        'END:VCALENDAR'
+    ].join('\r\n');
+
+    const blob = new Blob([ics], { type: 'text/calendar;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `xray-retraining-reminder-${formatDateForFilename(lastValidThrough)}.ics`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+}
+
+function printCertificate() {
+    window.print();
+}
+
+function initTheme() {
+    const stored = localStorage.getItem('xrayTrainingTheme');
+    const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const theme = stored || (prefersDark ? 'dark' : 'light');
+    applyTheme(theme);
+
+    const toggle = document.getElementById('theme-toggle');
+    if (toggle) {
+        toggle.addEventListener('click', () => {
+            const next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+            applyTheme(next);
+            localStorage.setItem('xrayTrainingTheme', next);
+        });
+    }
+}
+
+function applyTheme(theme) {
+    document.documentElement.setAttribute('data-theme', theme);
+    const label = document.getElementById('theme-toggle-label');
+    if (label) {
+        label.textContent = theme === 'dark' ? 'Light mode' : 'Dark mode';
+    }
+}
 
 function formatDate(date) {
     const options = {

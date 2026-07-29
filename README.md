@@ -13,9 +13,24 @@ Procedures are **facility safety procedures** derived from public instrument spe
 ## How to use
 
 1. Open `index.html` in a modern browser (or serve the folder locally).
-2. Enter an email to start; progress through 12 sections (knowledge checks gate “Next”).
-3. Complete the Section 12 commitment checklist, then pass the 15-question quiz at 100%.
-4. Download the completion JSON record (also stored in `localStorage`).
+2. Use the theme toggle (top right) for light or dark mode.
+3. Enter an email to start; progress through 12 sections (knowledge checks gate “Next”).
+4. Complete the Section 12 commitment checklist, then pass the 15-question quiz at 100%.
+5. On completion you can:
+   - **Print / Save Certificate (PDF)** — browser print dialog; choose “Save as PDF”
+   - **Add Retraining Reminder to Calendar** — downloads an `.ics` event (due date + 30-day and 7-day alarms)
+   - **Download JSON Record** — completion metadata for your files / supervisor
+
+## Where is the JSON file?
+
+**Not on GitHub.** Completions are stored only in the trainee’s browser (`localStorage`) on the machine that ran the training. Syncing this repo (iCloud, GitHub, etc.) does **not** sync completion records.
+
+To get a copy:
+
+1. Click **Download JSON Record** on the completion screen, or
+2. In the browser console: `downloadAllRecords()` or `viewAllTrainingRecords()`
+
+Have trainees email you the JSON and/or the printed certificate if you need a central record.
 
 ## Updating facility contacts
 
