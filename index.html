@@ -88,7 +88,7 @@
                     <ul>
                         <li>Ion chamber survey meters (dose rate)</li>
                         <li>Geiger-Müller detectors (qualitative; energy-dependent)</li>
-                        <li>Personnel dosimeters (TLD / OSL) when required by the RSO</li>
+                        <li>Personnel dosimeters (TLD / OSL) — <strong>not required</strong> for normal use of these enclosed NHMLAC systems</li>
                     </ul>
 
                     <div class="info-box">
@@ -112,47 +112,50 @@
             <div class="training-section hidden" id="section-2">
                 <h3>2. Our Instruments</h3>
                 <div class="content">
-                    <p>This training covers the three analytical X-ray systems at NHMLAC. Procedures below are <strong>facility safety procedures</strong> based on public instrument specifications and ANSI N43.2 enclosed-system practice — not vendor keystroke manuals. Always verify warning lights, E-stop location, and interlock behavior on the machine in front of you.</p>
+                    <p>This training covers the three analytical X-ray systems at NHMLAC. Procedures below are <strong>facility safety procedures</strong> for this lab (based on instrument specs and ANSI N43.2 enclosed-system practice). Status lights, E-stops, and interlock behavior described here match the instruments as configured at NHMLAC.</p>
 
                     <div class="instrument-card" id="card-rapid">
                         <h4>Rigaku R-AXIS RAPID — Single-Crystal XRD</h4>
-                        <p class="instrument-tag">Enclosed · Imaging-plate / goniometer · Highest manipulation risk</p>
+                        <p class="instrument-tag">Full cabinet · Mo source · Imaging-plate / goniometer · Highest manipulation risk</p>
                         <ul>
                             <li><strong>Purpose:</strong> Single-crystal structure analysis (small / macromolecular crystals)</li>
-                            <li><strong>Typical source:</strong> Sealed tube or rotating-anode generator (Cu or Mo); treat primary beam as extreme dose rate regardless of configuration</li>
-                            <li><strong>Enclosure:</strong> Radiation-shielded cabinet / panels with door/panel interlocks</li>
+                            <li><strong>Source:</strong> Molybdenum (Mo) anode — treat the primary beam as extreme dose rate</li>
+                            <li><strong>Enclosure:</strong> Full radiation-shielded cabinet with access interlocks</li>
+                            <li><strong>Status lights:</strong> “X-rays on” and “Shutter open”</li>
+                            <li><strong>Emergency stop:</strong> Stop button on the <strong>left side</strong> of the instrument</li>
+                            <li><strong>Cryostream:</strong> Not installed on this system</li>
                             <li><strong>High-risk operations:</strong> Crystal mounting, optical centering, work near the sample position with shutter potentially open, long data collections</li>
-                            <li><strong>Operator rule:</strong> Never place hands or tools in the beam path; confirm shutter and X-ray status indicators before opening; enclosure closed before collection</li>
+                            <li><strong>Operator rule:</strong> Never place hands or tools in the beam path; confirm “X-rays on” / “Shutter open” are off before opening; cabinet closed before collection</li>
                         </ul>
-                        <div class="verify-note">Verify on your machine: panel interlock behavior, shutter lamp(s), generator “X-rays ON” indicator, and E-stop / main power location.</div>
                     </div>
 
                     <div class="instrument-card" id="card-axrd">
                         <h4>Proto AXRD — Powder XRD</h4>
-                        <p class="instrument-tag">Enclosed · θ/θ powder diffractometer · ANSI N43.2 compliant design</p>
+                        <p class="instrument-tag">Enclosed · θ/θ powder diffractometer · Cu source · ANSI N43.2 compliant design</p>
                         <ul>
                             <li><strong>Purpose:</strong> Phase ID, crystallinity, lattice parameters on powders / bulk</li>
-                            <li><strong>Typical source:</strong> Fine-focus Cu ceramic tube (other anodes optional); ~kW-class power supply</li>
-                            <li><strong>Enclosure:</strong> Interlocked enclosure door — designed to auto-disable X-rays when opened</li>
-                            <li><strong>Status lights:</strong> “X-RAY ON” and “SHUTTER OPEN” (confirm exact labels on unit)</li>
+                            <li><strong>Source:</strong> Copper (Cu) tube</li>
+                            <li><strong>Enclosure:</strong> Interlocked enclosure doors — opening the doors dumps the beam / disables X-rays</li>
+                            <li><strong>Status lights:</strong> “X-rays on” and “Shutter open”</li>
+                            <li><strong>Emergency stop:</strong> Stop button on the <strong>left side</strong> of the instrument</li>
                             <li><strong>High-risk operations:</strong> Sample loading/unloading, cleaning spills, any urge to “just peek” with beam on</li>
                             <li><strong>Operator rule:</strong> Load powder only with generator/shutter confirmed safe; never defeat the door interlock; spills do not justify open-door operation with X-rays on</li>
                         </ul>
-                        <div class="verify-note">Verify on your machine: door interlock test behavior, warning-light locations, and sample-stage access path.</div>
                     </div>
 
                     <div class="instrument-card" id="card-xgt">
                         <h4>Horiba XGT-7200 — Micro-XRF</h4>
-                        <p class="instrument-tag">Cabinet sample chamber · Rh tube · Dual vacuum modes</p>
+                        <p class="instrument-tag">Cabinet sample chamber · Rh tube (50 kV max) · Dual vacuum modes</p>
                         <ul>
                             <li><strong>Purpose:</strong> Non-destructive elemental analysis / mapping (Na–U range typical)</li>
-                            <li><strong>Typical source:</strong> Rh target tube, up to ~50 kV / ~1 mA; mono-capillary microbeams (e.g. ~10 μm / 100 μm)</li>
-                            <li><strong>Enclosure:</strong> Fully shielded sample chamber is the primary barrier — cabinet-style system</li>
-                            <li><strong>Vacuum modes:</strong> Full vacuum (light-element sensitivity) vs partial/local vacuum (fragile / biological / museum objects). Vacuum choice is <strong>sample care</strong>, not a radiation bypass</li>
+                            <li><strong>Source:</strong> Rhodium (Rh) tube, <strong>50 kV max</strong>; mono-capillary microbeams</li>
+                            <li><strong>Enclosure:</strong> Fully shielded sample chamber — opening the chamber dumps the beam</li>
+                            <li><strong>Status indicator:</strong> Small red “X-rays” button/light on the <strong>top-front panel</strong></li>
+                            <li><strong>Emergency stop:</strong> On the <strong>stage control box</strong></li>
+                            <li><strong>Vacuum modes:</strong> Full vacuum (light-element sensitivity) vs partial/local vacuum (fragile / museum objects). Vacuum choice is <strong>sample care</strong>, not a radiation bypass. For partial-vacuum / heritage-object decisions, consult <strong>Aaron Celestian</strong> before running</li>
                             <li><strong>High-risk operations:</strong> Opening or forcing the chamber during a run; assuming “XRF is weak”</li>
                             <li><strong>Operator rule:</strong> Chamber closed and interlocked before X-rays; never force open during acquisition</li>
                         </ul>
-                        <div class="verify-note">Verify on your machine: chamber interlock, X-ray status indicators, and vacuum-mode switch procedure for heritage samples.</div>
                     </div>
 
                     <h4>Shared Dose Reality</h4>
@@ -333,27 +336,27 @@
                         </tr>
                         <tr>
                             <td>Primary barrier</td>
-                            <td>Shielded enclosure / panels</td>
+                            <td>Full shielded cabinet</td>
                             <td>Interlocked enclosure cabinet</td>
                             <td>Shielded sample chamber</td>
                         </tr>
                         <tr>
                             <td>Access interlock</td>
-                            <td>Panel/door interlocks (verify locally)</td>
-                            <td>Door interlock — X-ray off when open</td>
-                            <td>Chamber interlock (verify locally)</td>
+                            <td>Cabinet access interlocks</td>
+                            <td>Door interlock — doors open dumps beam</td>
+                            <td>Chamber interlock — open chamber dumps beam</td>
                         </tr>
                         <tr>
                             <td>Status lights</td>
-                            <td>Generator / shutter indicators</td>
-                            <td>X-RAY ON + SHUTTER OPEN</td>
-                            <td>System X-ray status indicators</td>
+                            <td>X-rays on · Shutter open</td>
+                            <td>X-rays on · Shutter open</td>
+                            <td>Red “X-rays” indicator (top-front panel)</td>
                         </tr>
                         <tr>
-                            <td>Beam control</td>
-                            <td>Shutter + generator HV</td>
-                            <td>Shutter + generator HV</td>
-                            <td>Tube enable with chamber closed</td>
+                            <td>Beam control / E-stop</td>
+                            <td>Shutter + HV; stop button on left side</td>
+                            <td>Shutter + HV; stop button on left side</td>
+                            <td>Tube enable with chamber closed; E-stop on stage control box</td>
                         </tr>
                         <tr>
                             <td>Operator dose (normal)</td>
@@ -370,9 +373,9 @@
 
                     <h4>Interlock Testing Cadence</h4>
                     <ul>
-                        <li><strong>Daily:</strong> visual check of lights and enclosure integrity</li>
-                        <li><strong>Quarterly:</strong> functional interlock test (authorized personnel) — document in log</li>
-                        <li><strong>Annually:</strong> comprehensive survey / inspection as directed by RSO</li>
+                        <li><strong>Daily:</strong> visual check of lights and enclosure integrity (operator)</li>
+                        <li><strong>Quarterly:</strong> functional interlock test performed by <strong>Aaron Celestian</strong> — documented in the log</li>
+                        <li><strong>Annually:</strong> radiation survey / comprehensive safety inspection</li>
                     </ul>
 
                     <div class="danger-box">
@@ -400,45 +403,44 @@
 
                     <h4>Universal Pre-Use Checklist</h4>
                     <ul>
-                        <li>You are trained and authorized for this specific instrument</li>
+                        <li>You are trained and authorized for this specific instrument (authorization only from <strong>Aaron Celestian</strong> or <strong>Kriss Leftwich</strong>)</li>
                         <li>Enclosure / chamber intact; no cracks, missing panels, or taped interlocks</li>
                         <li>Warning lights and status indicators appear functional</li>
-                        <li>Survey meter available if required for the task</li>
-                        <li>Dosimeter worn if required by RSO</li>
                         <li>No “DO NOT OPERATE” tag present</li>
+                        <li>Dosimetry is <strong>not</strong> required for normal enclosed-system use in this lab</li>
                     </ul>
 
                     <h4>Rigaku R-AXIS RAPID SOP (Safety)</h4>
                     <ol>
-                        <li><strong>Authorize:</strong> Confirm SCXRD authorization and any cryostream / generator prerequisites.</li>
-                        <li><strong>Inspect:</strong> Check enclosure panels, shutter/X-ray lamps, and that no service bypass is engaged.</li>
+                        <li><strong>Authorize:</strong> Confirm SCXRD authorization is current.</li>
+                        <li><strong>Inspect:</strong> Check full cabinet closed/intact; “X-rays on” and “Shutter open” indicators; know the left-side stop button location.</li>
                         <li><strong>Load:</strong> Open enclosure only with X-rays confirmed off and shutter closed. Mount and optically center the crystal without placing body parts in the beam path.</li>
-                        <li><strong>Close &amp; verify:</strong> Close all panels. Confirm interlocks satisfied and indicators match expected “ready” state.</li>
-                        <li><strong>Run:</strong> Start collection from the control position. Do not open panels during acquisition.</li>
-                        <li><strong>Shut down:</strong> Close shutter; follow local generator ramp-down practice; confirm indicators show beam off.</li>
+                        <li><strong>Close &amp; verify:</strong> Close the cabinet. Confirm interlocks satisfied and indicators match expected “ready” state.</li>
+                        <li><strong>Run:</strong> Start collection from the control position. Do not open the cabinet during acquisition.</li>
+                        <li><strong>Shut down:</strong> Close shutter; confirm “X-rays on” / “Shutter open” are off. Use the left-side stop button in an emergency.</li>
                         <li><strong>Unload &amp; log:</strong> Open only after confirmed safe; retrieve sample; log usage and any anomalies.</li>
                     </ol>
-                    <div class="info-box"><strong>RAPID focus:</strong> Mounting and centering are the highest-risk moments. Never “feel for the beam.” Use cameras / optical alignment tools.</div>
+                    <div class="info-box"><strong>RAPID focus:</strong> Mo source, full cabinet, no cryostream. Mounting and centering are the highest-risk moments. Never “feel for the beam.” Use cameras / optical alignment tools.</div>
 
                     <h4>Proto AXRD SOP (Safety)</h4>
                     <ol>
                         <li><strong>Authorize:</strong> Powder XRD authorization current.</li>
-                        <li><strong>Inspect:</strong> Door closes fully; X-RAY ON and SHUTTER OPEN lights present and undamaged.</li>
+                        <li><strong>Inspect:</strong> Doors close fully; “X-rays on” and “Shutter open” lights present and undamaged; know the left-side stop button.</li>
                         <li><strong>Load:</strong> With X-rays off / shutter closed, mount powder or bulk sample. Clean spills with beam off — never with the door open and tube energized.</li>
                         <li><strong>Close &amp; verify:</strong> Close enclosure; confirm interlock; lights should not show X-rays on until you intentionally start.</li>
-                        <li><strong>Run:</strong> Start scan. If door is opened, X-rays must cease — if they do not, treat as emergency (Section 9).</li>
-                        <li><strong>Shut down:</strong> End run; confirm shutter closed / X-rays off before opening.</li>
+                        <li><strong>Run:</strong> Start scan. Opening the doors must dump the beam — if X-rays remain on with a door open, treat as emergency (Section 9).</li>
+                        <li><strong>Shut down:</strong> End run; confirm shutter closed / X-rays off before opening. Use the left-side stop in an emergency.</li>
                         <li><strong>Unload &amp; log:</strong> Remove sample; leave instrument in safe state; log run.</li>
                     </ol>
 
                     <h4>Horiba XGT-7200 SOP (Safety)</h4>
                     <ol>
-                        <li><strong>Authorize:</strong> Micro-XRF authorization current; know vacuum mode for the object.</li>
-                        <li><strong>Inspect:</strong> Chamber seal/window intact; status indicators normal.</li>
+                        <li><strong>Authorize:</strong> Micro-XRF authorization current. For partial-vacuum or fragile heritage objects, consult Aaron Celestian before the run.</li>
+                        <li><strong>Inspect:</strong> Chamber seal/window intact; red “X-rays” indicator on the top-front panel; know the E-stop on the stage control box.</li>
                         <li><strong>Load:</strong> Place sample with X-rays off. Choose full vs partial vacuum for sample survival — radiation rules are identical in both modes.</li>
                         <li><strong>Close &amp; verify:</strong> Close chamber; confirm interlock before enabling X-rays.</li>
-                        <li><strong>Run:</strong> Acquire spectra/maps. Never force the chamber open mid-run.</li>
-                        <li><strong>Shut down:</strong> Stop X-rays; vent per procedure; confirm beam off.</li>
+                        <li><strong>Run:</strong> Acquire spectra/maps. Never force the chamber open mid-run. Opening the chamber must dump the beam.</li>
+                        <li><strong>Shut down:</strong> Stop X-rays; vent per procedure; confirm the “X-rays” indicator is off. Use the stage-control-box E-stop in an emergency.</li>
                         <li><strong>Unload &amp; log:</strong> Retrieve object carefully; log analysis and any chamber/seal concerns.</li>
                     </ol>
 
@@ -609,11 +611,13 @@
                     <div class="contact-box" id="contacts-block">
                         <p><strong>Facility / Lab:</strong> NHMLAC — X-ray Diffraction &amp; Fluorescence Lab</p>
                         <p><strong>Training records / Mineral Sciences:</strong> <a href="mailto:minsci@nhm.org?subject=X-Ray%20Operator%20Safety%20Training%20Completion&amp;body=Hello%2C%0A%0AI%20have%20completed%20the%20NHMLAC%20X-Ray%20Operator%20Safety%20Training.%0A%0ATrainee%20email%3A%20%0ACompletion%20date%3A%20%0AValid%20through%3A%20%0A%0APlease%20find%20my%20certificate%20and%20JSON%20training%20record%20attached.%0A%0AThank%20you.">minsci@nhm.org</a></p>
-                        <p><strong>Radiation Safety Officer (RSO):</strong> [Name] · [Phone] · [Email]</p>
-                        <p><strong>Instrument Steward / Supervisor:</strong> [Name] · [Phone] · [Email]</p>
-                        <p><strong>After-hours / Security:</strong> [Number]</p>
-                        <p><strong>Emergency:</strong> 911</p>
-                        <p class="contact-edit-hint">Edit this block in <code>index.html</code> (search for <code>contacts-block</code>) when RSO/steward contacts are available. Training records go to <a href="mailto:minsci@nhm.org">minsci@nhm.org</a>.</p>
+                        <p><strong>Radiation Safety Officer (RSO):</strong> Aaron Celestian · 213-763-3360 · <a href="mailto:minsci@nhm.org">minsci@nhm.org</a></p>
+                        <p><strong>Instrument Steward / Supervisor:</strong> Aaron Celestian · 213-763-3360 · <a href="mailto:minsci@nhm.org">minsci@nhm.org</a></p>
+                        <p><strong>Co-authorizer:</strong> Kriss Leftwich (authorization to operate may be granted only by Aaron Celestian or Kriss Leftwich) · <a href="mailto:minsci@nhm.org">minsci@nhm.org</a></p>
+                        <p><strong>After-hours / Security (non-emergency):</strong> 213-763-3414 (or <strong>3414</strong> from an NHM phone) · <a href="mailto:nhmsecdispatch@nhm.org">nhmsecdispatch@nhm.org</a></p>
+                        <p><strong>Dispatch Emergency Line:</strong> 213-763-3333 (or <strong>3333</strong> from any company phone)</p>
+                        <p><strong>Emergency (true health / life-threatening):</strong> 911</p>
+                        <p class="contact-edit-hint">Lab / training contact email is <a href="mailto:minsci@nhm.org">minsci@nhm.org</a>. Office phone for Aaron Celestian: 213-763-3360. Security dispatch remains on the numbers above.</p>
                     </div>
 
                     <div class="danger-box">
@@ -647,29 +651,29 @@
 
                     <h4>Operator Responsibilities</h4>
                     <ul>
-                        <li>Complete this training before unsupervised use; renew every 2 years (or sooner if required)</li>
-                        <li>Operate only instruments you are authorized for</li>
+                        <li>Complete this training before unsupervised use; renew every <strong>2 years</strong> (or sooner if required)</li>
+                        <li>Operate only instruments you are authorized for — authorization is granted only by <strong>Aaron Celestian</strong> or <strong>Kriss Leftwich</strong></li>
                         <li>Never bypass interlocks; report defects immediately</li>
-                        <li>Log use; wear dosimetry if assigned</li>
+                        <li>Log use (dosimetry is not required for normal use of these enclosed systems)</li>
                         <li>Stop work when something looks wrong</li>
                     </ul>
 
                     <h4>Supervisor / Instrument Steward</h4>
                     <ul>
                         <li>Ensure operators are trained; maintain equipment and tags</li>
-                        <li>Coordinate surveys, quarterly interlock tests, and vendor service</li>
+                        <li>Aaron Celestian runs quarterly interlock functional tests and coordinates the annual survey</li>
                         <li>Investigate near-misses</li>
                     </ul>
 
                     <h4>Radiation Safety Officer (RSO)</h4>
                     <ul>
-                        <li>Oversee the radiation safety program and authorizations</li>
+                        <li>Oversee the radiation safety program and authorizations (with Kriss Leftwich as co-authorizer)</li>
                         <li>Approve procedures; lead incident response and regulatory liaison</li>
-                        <li>Review dosimetry and survey results</li>
+                        <li>Coordinate annual survey results and program compliance</li>
                     </ul>
 
                     <div class="info-box">
-                        <strong>Training validity:</strong> This module is valid for 2 years from completion unless the RSO requires earlier retraining (incident, major equipment change, or policy update).
+                        <strong>Training validity:</strong> This module is valid for <strong>2 years</strong> from completion unless Aaron Celestian or Kriss Leftwich requires earlier retraining (incident, major equipment change, or policy update).
                     </div>
 
                     <div class="knowledge-check" data-section="10" data-correct="c">
@@ -689,7 +693,7 @@
             <div class="training-section hidden" id="section-11">
                 <h3>11. Instrument Quick Reference</h3>
                 <div class="content">
-                    <p>Use the tabs to review each instrument’s safety snapshot. These are facility quick cards — verify lights and interlocks on the physical machine.</p>
+                    <p>Use the tabs to review each instrument’s safety snapshot for this lab.</p>
 
                     <div class="instrument-tabs" role="tablist">
                         <button type="button" class="tab-btn active" data-tab="rapid">R-AXIS RAPID</button>
@@ -700,8 +704,9 @@
                     <div class="tab-panel active" id="tab-rapid">
                         <h4>Rigaku R-AXIS RAPID</h4>
                         <ul>
-                            <li><strong>Type:</strong> Single-crystal XRD, enclosed</li>
-                            <li><strong>Watch for:</strong> Shutter lamps, panel interlocks, generator X-ray ON</li>
+                            <li><strong>Type:</strong> Single-crystal XRD, full cabinet, Mo source (no cryostream)</li>
+                            <li><strong>Watch for:</strong> “X-rays on”, “Shutter open”, cabinet interlocks</li>
+                            <li><strong>E-stop:</strong> Stop button on the left side</li>
                             <li><strong>Highest risk:</strong> Mounting / centering</li>
                             <li><strong>Before open:</strong> Shutter closed, X-rays off</li>
                             <li><strong>Never:</strong> Reach toward sample with beam indicators on</li>
@@ -710,8 +715,9 @@
                     <div class="tab-panel hidden" id="tab-axrd">
                         <h4>Proto AXRD</h4>
                         <ul>
-                            <li><strong>Type:</strong> Powder XRD, interlocked enclosure</li>
-                            <li><strong>Watch for:</strong> X-RAY ON, SHUTTER OPEN, door interlock</li>
+                            <li><strong>Type:</strong> Powder XRD, interlocked enclosure, Cu source</li>
+                            <li><strong>Watch for:</strong> “X-rays on”, “Shutter open”; doors open → beam dumps</li>
+                            <li><strong>E-stop:</strong> Stop button on the left side</li>
                             <li><strong>Highest risk:</strong> Loading / spill cleanup mid-run</li>
                             <li><strong>Before open:</strong> Confirm lights show safe state</li>
                             <li><strong>Never:</strong> Defeat door interlock</li>
@@ -720,10 +726,11 @@
                     <div class="tab-panel hidden" id="tab-xgt">
                         <h4>Horiba XGT-7200</h4>
                         <ul>
-                            <li><strong>Type:</strong> Cabinet micro-XRF, Rh tube ~50 kV</li>
-                            <li><strong>Watch for:</strong> Chamber closed/interlocked, X-ray status</li>
+                            <li><strong>Type:</strong> Cabinet micro-XRF, Rh tube, 50 kV max</li>
+                            <li><strong>Watch for:</strong> Red “X-rays” indicator (top-front); open chamber → beam dumps</li>
+                            <li><strong>E-stop:</strong> On the stage control box</li>
                             <li><strong>Highest risk:</strong> Opening chamber during acquisition</li>
-                            <li><strong>Vacuum modes:</strong> Sample care only — not a radiation exemption</li>
+                            <li><strong>Vacuum modes:</strong> Sample care only — not a radiation exemption; ask Aaron Celestian before partial vacuum</li>
                             <li><strong>Never:</strong> Force chamber open with X-rays on</li>
                         </ul>
                     </div>
@@ -731,11 +738,11 @@
                     <h4>Before-Use Mini Checklist</h4>
                     <div class="checklist">
                         <ul>
-                            <li>☐ Authorized for this instrument</li>
+                            <li>☐ Authorized by Aaron Celestian or Kriss Leftwich</li>
                             <li>☐ Enclosure/chamber intact; no DO NOT OPERATE tag</li>
                             <li>☐ Status lights understood and appear functional</li>
                             <li>☐ Know E-stop / power-off location</li>
-                            <li>☐ RSO / steward contacts known (Section 9)</li>
+                            <li>☐ Contacts known (Section 9); email completion to minsci@nhm.org</li>
                         </ul>
                     </div>
 
@@ -949,7 +956,7 @@
 
                         <div class="quiz-question" data-question="14">
                             <h4>Question 14:</h4>
-                            <p>Proto AXRD status lights labeled “X-RAY ON” and “SHUTTER OPEN” indicate:</p>
+                            <p>Proto AXRD status lights labeled “X-rays on” and “Shutter open” indicate:</p>
                             <div class="quiz-options">
                                 <label><input type="radio" name="q14" value="a"> Decorative LEDs with no safety meaning</label>
                                 <label><input type="radio" name="q14" value="b"> That the instrument is powered for cooling only</label>
