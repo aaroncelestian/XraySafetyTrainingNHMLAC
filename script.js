@@ -9,17 +9,17 @@ const sectionKcPassed = {}; // knowledge checks completed per section
 let finalChecklistComplete = false;
 
 const kcFeedback = {
-    1: { b: 'Correct — soft lab X-rays deposit energy efficiently in tissue.' },
-    2: { c: 'Correct — the Horiba XGT-7200 is the cabinet micro-XRF.' },
-    3: { b: 'Correct — about 70% of damage is indirect via free radicals.' },
-    4: { c: 'Correct — extremity limit is typically 50 rem/year.' },
-    5: { b: 'Correct — ANSI N43.2 requires at least two independent interlocks.' },
-    6: { a: 'Correct — never open with X-rays generating; confirm safe state first.' },
-    7: { b: 'Correct — inverse square law: double distance → 25% intensity.' },
-    8: { b: 'Correct — treat as an emergency and notify the RSO.' },
-    9: { c: 'Correct — capture who, instrument, time, settings, access state, duration, witnesses.' },
-    10: { a: 'Correct — ANSI N43.2 covers XRD/XRF analysis equipment safety.' },
-    11: { b: 'Correct — mounting and centering are the highest-risk moments on the RAPID.' }
+    1: { a: 'Correct — soft lab X-rays deposit energy efficiently in tissue.' },
+    2: { a: 'Correct — the Horiba XGT-7200 is the cabinet micro-XRF.' },
+    3: { c: 'Correct — about 70% of damage is indirect via free radicals.' },
+    4: { a: 'Correct — extremity limit is typically 50 rem/year.' },
+    5: { c: 'Correct — ANSI N43.2 requires at least two independent interlocks.' },
+    6: { c: 'Correct — never open with X-rays generating; confirm safe state first.' },
+    7: { a: 'Correct — inverse square law: double distance → 25% intensity.' },
+    8: { c: 'Correct — treat as an emergency and notify the RSO.' },
+    9: { a: 'Correct — capture who, instrument, time, settings, access state, duration, witnesses.' },
+    10: { c: 'Correct — ANSI N43.2 covers XRD/XRF analysis equipment safety.' },
+    11: { a: 'Correct — mounting and centering are the highest-risk moments on the RAPID.' }
 };
 
 const loginSection = document.getElementById('login-section');
@@ -241,6 +241,11 @@ function initFinalChecklist() {
 
 let lastCompletionDate = null;
 let lastValidThrough = null;
+let lastTrainingRecord = null;
+let completionGateActive = false;
+let recordAcknowledged = false;
+
+const MINSCI_EMAIL = 'minsci@nhm.org';
 
 function completeTraining() {
     const completionDate = new Date();
@@ -260,6 +265,7 @@ function completeTraining() {
         module: 'NHMLAC X-Ray Operator Safety Training',
         validityYears: 2
     };
+    lastTrainingRecord = trainingRecord;
 
     saveTrainingRecord(trainingRecord);
 
@@ -276,6 +282,9 @@ function completeTraining() {
     document.getElementById('cert-name').textContent = userEmail;
     document.getElementById('cert-completed').textContent = completedText;
     document.getElementById('cert-valid').textContent = validText;
+
+    updateMinsciMailtoLink();
+    enableCompletionLeaveGate();
 
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
@@ -300,22 +309,163 @@ function generateJSONFile(data) {
 }
 
 document.getElementById('download-cert-btn').addEventListener('click', () => {
-    const trainingData = JSON.parse(localStorage.getItem('xrayTrainingData') || '[]');
-    const jsonStr = JSON.stringify(trainingData, null, 2);
-    const blob = new Blob([jsonStr], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `xray-training-records-${formatDateForFilename(new Date())}.json`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
+    downloadJsonRecord();
 });
 
 document.getElementById('download-ics-btn').addEventListener('click', downloadRetrainingIcs);
 document.getElementById('print-cert-btn').addEventListener('click', printCertificate);
+
+const emailMinsciBtn = document.getElementById('email-minsci-btn');
+if (emailMinsciBtn) {
+    emailMinsciBtn.addEventListener('click', emailRecordToMinsci);
+}
+
+const recordAck = document.getElementById('record-sent-ack');
+if (recordAck) {
+    recordAck.addEventListener('change', () => {
+        recordAcknowledged = recordAck.checked;
+    });
+}
+
+function buildMinsciMailto() {
+    const completedText = lastCompletionDate ? formatDate(lastCompletionDate) : '';
+    const validText = lastValidThrough ? formatDateShort(lastValidThrough) : '';
+    const subject = 'X-Ray Operator Safety Training Completion';
+    const body = [
+        'Hello,',
+        '',
+        'I have completed the NHMLAC X-Ray Operator Safety Training (Rigaku R-AXIS RAPID, Proto AXRD, Horiba XGT-7200).',
+        '',
+        `Trainee email: ${userEmail || ''}`,
+        `Completion date: ${completedText}`,
+        `Valid through: ${validText}`,
+        '',
+        'Please find my certificate (.html) and JSON training record attached.',
+        '',
+        'Thank you.'
+    ].join('\n');
+
+    return `mailto:${MINSCI_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+}
+
+function updateMinsciMailtoLink() {
+    const link = document.getElementById('minsci-mailto-link');
+    if (link) {
+        link.href = buildMinsciMailto();
+        link.textContent = MINSCI_EMAIL;
+    }
+}
+
+function triggerDownload(filename, blob) {
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+
+function downloadJsonRecord() {
+    const trainingData = JSON.parse(localStorage.getItem('xrayTrainingData') || '[]');
+    const latest = lastTrainingRecord || trainingData[trainingData.length - 1] || {};
+    const payload = lastTrainingRecord || trainingData;
+    const jsonStr = JSON.stringify(payload, null, 2);
+    const stamp = formatDateForFilename(lastCompletionDate || new Date());
+    const nameHint = (userEmail || latest.email || 'trainee').replace(/[^a-zA-Z0-9._@-]/g, '_');
+    triggerDownload(`xray-training-record-${nameHint}-${stamp}.json`, new Blob([jsonStr], { type: 'application/json' }));
+}
+
+function buildCertificateHtml() {
+    const completedText = lastCompletionDate ? formatDate(lastCompletionDate) : '—';
+    const validText = lastValidThrough ? formatDateShort(lastValidThrough) : '—';
+    const name = userEmail || '—';
+    return `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>X-Ray Operator Safety Training Certificate — ${name}</title>
+<style>
+  body { font-family: Georgia, serif; color: #1c2430; max-width: 760px; margin: 40px auto; padding: 24px; }
+  .border { border: 2px solid #1a2f45; padding: 40px; position: relative; }
+  .border:before { content: ""; position: absolute; inset: 10px; border: 1px solid #1f5c57; pointer-events: none; }
+  .org { text-transform: uppercase; letter-spacing: 0.12em; font-size: 12px; color: #5a6573; font-family: sans-serif; }
+  .label { color: #1f5c57; margin-top: 12px; }
+  h1 { font-size: 28px; margin: 8px 0 12px; }
+  .name { font-size: 24px; font-weight: bold; border-bottom: 1px solid #c9d2dc; display: inline-block; min-width: 60%; padding-bottom: 6px; margin: 12px 0; }
+  .meta { display: flex; justify-content: space-between; gap: 16px; margin-top: 28px; font-family: sans-serif; font-size: 14px; }
+  .meta span { display: block; text-transform: uppercase; letter-spacing: 0.08em; font-size: 11px; color: #5a6573; }
+  .foot { margin-top: 24px; font-size: 12px; color: #5a6573; font-family: sans-serif; }
+</style>
+</head>
+<body>
+  <div class="border">
+    <p class="org">Natural History Museum of Los Angeles County</p>
+    <p class="label">Certificate of Completion</p>
+    <h1>X-Ray Operator Safety Training</h1>
+    <p>Rigaku R-AXIS RAPID · Proto AXRD · Horiba XGT-7200</p>
+    <p>This certifies that</p>
+    <p class="name">${name}</p>
+    <p>has successfully completed operator safety training for analytical X-ray diffraction and fluorescence instruments, including the final assessment at 100%.</p>
+    <div class="meta">
+      <div><span>Completed</span>${completedText}</div>
+      <div><span>Valid through</span>${validText}</div>
+      <div><span>Validity period</span>2 years from completion</div>
+    </div>
+    <p class="foot">Based on ANSI N43.2 and institutional radiation safety policy. Authorization to operate remains subject to RSO approval. Please email this certificate with your JSON record to minsci@nhm.org.</p>
+  </div>
+</body>
+</html>`;
+}
+
+function downloadCertificateFile() {
+    const stamp = formatDateForFilename(lastCompletionDate || new Date());
+    const nameHint = (userEmail || 'trainee').replace(/[^a-zA-Z0-9._@-]/g, '_');
+    triggerDownload(
+        `xray-training-certificate-${nameHint}-${stamp}.html`,
+        new Blob([buildCertificateHtml()], { type: 'text/html;charset=utf-8' })
+    );
+}
+
+function emailRecordToMinsci() {
+    if (!lastTrainingRecord && !userEmail) {
+        alert('Complete training first, then email your record.');
+        return;
+    }
+    downloadCertificateFile();
+    setTimeout(() => {
+        downloadJsonRecord();
+        setTimeout(() => {
+            // Avoid leave-page warning when opening the mail client
+            const wasActive = completionGateActive;
+            completionGateActive = false;
+            window.location.href = buildMinsciMailto();
+            setTimeout(() => {
+                completionGateActive = wasActive;
+            }, 1500);
+            alert(
+                'Your certificate and JSON record were downloaded.\n\n' +
+                'Your email app should open to minsci@nhm.org with subject and body filled in.\n\n' +
+                'Important: browsers cannot auto-attach files — please attach the two downloaded files before sending.'
+            );
+        }, 400);
+    }, 400);
+}
+
+function enableCompletionLeaveGate() {
+    completionGateActive = true;
+    recordAcknowledged = false;
+    const ack = document.getElementById('record-sent-ack');
+    if (ack) ack.checked = false;
+}
+
+window.addEventListener('beforeunload', (e) => {
+    if (!completionGateActive || recordAcknowledged) return;
+    e.preventDefault();
+    e.returnValue = 'Have you downloaded your training record or emailed minsci@nhm.org?';
+    return e.returnValue;
+});
 
 function formatDateShort(date) {
     return date.toLocaleDateString('en-US', {
@@ -503,136 +653,136 @@ window.clearAllTrainingData = function () {
 
 const quizAnswers = {
     q1: {
-        correct: 'b',
+        correct: 'd',
         feedback: {
             a: 'Incorrect. 3.6 seconds is roughly the time to deliver a lethal dose (~500 rem), not the annual limit. Review Section 2.',
-            b: 'Correct! A typical 40 kV, 40 mA Cu tube can deliver ~5 rem in approximately 0.036 seconds at the exit port.',
-            c: 'Incorrect. Far too long — the primary beam is extremely intense. Review Section 2.',
-            d: 'Incorrect. This is 10× too long. Review Section 2.'
+            b: 'Incorrect. Far too long — the primary beam is extremely intense. Review Section 2.',
+            c: 'Incorrect. This is 10× too long. Review Section 2.',
+            d: 'Correct! A typical 40 kV, 40 mA Cu tube can deliver ~5 rem in approximately 0.036 seconds at the exit port.'
         }
     },
     q2: {
-        correct: 'b',
+        correct: 'a',
         feedback: {
-            a: 'Incorrect. A single interlock lacks redundancy. ANSI N43.2 requires at least two. Review Section 5.',
-            b: 'Correct! ANSI N43.2 requires a minimum of two independent interlocks.',
+            a: 'Correct! ANSI N43.2 requires a minimum of two independent interlocks.',
+            b: 'Incorrect. A single interlock lacks redundancy. ANSI N43.2 requires at least two. Review Section 5.',
             c: 'Incorrect. More can help, but the minimum is two. Review Section 5.',
             d: 'Incorrect. Four exceeds the minimum. Review Section 5.'
         }
     },
     q3: {
-        correct: 'b',
+        correct: 'c',
         feedback: {
             a: 'Incorrect. ALARA = As Low As Reasonably Achievable. Review Section 3.',
-            b: 'Correct! ALARA means As Low As Reasonably Achievable.',
-            c: 'Incorrect. Review Section 3.',
+            b: 'Incorrect. Review Section 3.',
+            c: 'Correct! ALARA means As Low As Reasonably Achievable.',
             d: 'Incorrect. ALARA is optimization, not merely meeting limits. Review Section 3.'
         }
     },
     q4: {
-        correct: 'b',
+        correct: 'd',
         feedback: {
             a: 'Incorrect. Inverse square law — doubling distance → 1/4 intensity. Review Section 7.',
-            b: 'Correct! Doubling distance reduces intensity to 25%.',
-            c: 'Incorrect. That would be roughly tripling distance. Review Section 7.',
-            d: 'Incorrect. That would be quadrupling distance. Review Section 7.'
+            b: 'Incorrect. That would be roughly tripling distance. Review Section 7.',
+            c: 'Incorrect. That would be quadrupling distance. Review Section 7.',
+            d: 'Correct! Doubling distance reduces intensity to 25%.'
         }
     },
     q5: {
-        correct: 'c',
+        correct: 'a',
         feedback: {
-            a: 'Incorrect. 5 rem is the whole-body effective dose limit. Review Section 4.',
-            b: 'Incorrect. 15 rem is typically the lens-of-eye limit. Review Section 4.',
-            c: 'Correct! Extremity limit is typically 50 rem (500 mSv) per year.',
+            a: 'Correct! Extremity limit is typically 50 rem (500 mSv) per year.',
+            b: 'Incorrect. 5 rem is the whole-body effective dose limit. Review Section 4.',
+            c: 'Incorrect. 15 rem is typically the lens-of-eye limit. Review Section 4.',
             d: 'Incorrect. That exceeds the usual extremity limit. Review Section 4.'
         }
     },
     q6: {
-        correct: 'b',
+        correct: 'c',
         feedback: {
             a: 'Incorrect. Direct damage is ~30%. Review Section 3.',
-            b: 'Correct! Indirect free-radical damage is ~70%.',
-            c: 'Incorrect. Review Section 3.',
+            b: 'Incorrect. Review Section 3.',
+            c: 'Correct! Indirect free-radical damage is ~70%.',
             d: 'Incorrect. Review Section 3.'
         }
     },
     q7: {
-        correct: 'd',
+        correct: 'a',
         feedback: {
-            a: 'Incorrect. Never bypass interlocks. Review Section 5.',
-            b: 'Incorrect. Alignment must never require defeating interlocks. Review Sections 5–7.',
-            c: 'Incorrect. Even with RSO present, operators must not defeat interlocks. Review Section 5.',
-            d: 'Correct! It is never acceptable to bypass or defeat safety interlocks.'
+            a: 'Correct! It is never acceptable to bypass or defeat safety interlocks.',
+            b: 'Incorrect. Never bypass interlocks. Review Section 5.',
+            c: 'Incorrect. Alignment must never require defeating interlocks. Review Sections 5–7.',
+            d: 'Incorrect. Even with RSO present, operators must not defeat interlocks. Review Section 5.'
         }
     },
     q8: {
-        correct: 'b',
+        correct: 'd',
         feedback: {
             a: 'Incorrect. 2 Gy is transient erythema. Review Section 3.',
-            b: 'Correct! Main erythema threshold is about 6 Gy.',
-            c: 'Incorrect. 10 Gy is dry desquamation. Review Section 3.',
-            d: 'Incorrect. 15 Gy is moist desquamation. Review Section 3.'
+            b: 'Incorrect. 10 Gy is dry desquamation. Review Section 3.',
+            c: 'Incorrect. 15 Gy is moist desquamation. Review Section 3.',
+            d: 'Correct! Main erythema threshold is about 6 Gy.'
         }
     },
     q9: {
-        correct: 'c',
+        correct: 'a',
         feedback: {
-            a: 'Incorrect. Daily visual checks yes; functional tests are less frequent. Review Section 5.',
-            b: 'Incorrect. Review Section 5.',
-            c: 'Correct! Functional interlock tests: quarterly (with daily visual checks).',
+            a: 'Correct! Functional interlock tests: quarterly (with daily visual checks).',
+            b: 'Incorrect. Daily visual checks yes; functional tests are less frequent. Review Section 5.',
+            c: 'Incorrect. Review Section 5.',
             d: 'Incorrect. Annual comprehensive inspections exist, but functional tests are quarterly. Review Section 5.'
         }
     },
     q10: {
-        correct: 'c',
+        correct: 'd',
         feedback: {
             a: 'Incorrect. Enclosed systems should do far better. Review Section 3.',
             b: 'Incorrect. Even 100 mrem suggests investigation. Review Section 3.',
-            c: 'Correct! Operator dose should be effectively zero (&lt;10 mrem/year).',
-            d: 'Incorrect. That indicates a safety problem. Review Section 3.'
+            c: 'Incorrect. That indicates a safety problem. Review Section 3.',
+            d: 'Correct! Operator dose should be effectively zero (&lt;10 mrem/year).'
         }
     },
     q11: {
-        correct: 'c',
+        correct: 'a',
         feedback: {
-            a: 'Incorrect. RAPID is single-crystal XRD. Review Section 2.',
-            b: 'Incorrect. AXRD is powder XRD. Review Section 2.',
-            c: 'Correct! Horiba XGT-7200 is the cabinet micro-XRF.',
+            a: 'Correct! Horiba XGT-7200 is the cabinet micro-XRF.',
+            b: 'Incorrect. RAPID is single-crystal XRD. Review Section 2.',
+            c: 'Incorrect. AXRD is powder XRD. Review Section 2.',
             d: 'Incorrect. This lab training covers enclosed systems, not handheld open-beam XRF. Review Section 2.'
         }
     },
     q12: {
-        correct: 'b',
+        correct: 'c',
         feedback: {
             a: 'Incorrect. Logbook work is not the high-risk step. Review Sections 2 and 6.',
-            b: 'Correct! Mounting and centering are the highest-risk moments on the RAPID.',
-            c: 'Incorrect. Collection with enclosure closed is designed to be safe. Review Section 6.',
+            b: 'Incorrect. Collection with enclosure closed is designed to be safe. Review Section 6.',
+            c: 'Correct! Mounting and centering are the highest-risk moments on the RAPID.',
             d: 'Incorrect. Review Sections 2 and 6.'
         }
     },
     q13: {
-        correct: 'b',
+        correct: 'd',
         feedback: {
             a: 'Incorrect. Never open the chamber during acquisition. Review Sections 2 and 6.',
-            b: 'Correct! Vacuum mode is for sample care; radiation rules still fully apply.',
-            c: 'Incorrect. Interlocks must remain active. Review Section 5.',
-            d: 'Incorrect. Dosimetry follows RSO requirements. Review Section 10.'
+            b: 'Incorrect. Interlocks must remain active. Review Section 5.',
+            c: 'Incorrect. Dosimetry follows RSO requirements. Review Section 10.',
+            d: 'Correct! Vacuum mode is for sample care; radiation rules still fully apply.'
         }
     },
     q14: {
-        correct: 'b',
+        correct: 'c',
         feedback: {
             a: 'Incorrect. Status lights are critical safety indicators. Review Sections 2 and 5.',
-            b: 'Correct! Use X-RAY ON / SHUTTER OPEN status before opening the enclosure.',
-            c: 'Incorrect. Review Section 6.',
+            b: 'Incorrect. Review Section 6.',
+            c: 'Correct! Use X-RAY ON / SHUTTER OPEN status before opening the enclosure.',
             d: 'Incorrect. Never defeat interlocks. Review Section 5.'
         }
     },
     q15: {
-        correct: 'b',
+        correct: 'a',
         feedback: {
-            a: 'Incorrect. Stop immediately — do not finish the run. Review Section 9.',
-            b: 'Correct! Power down, restrict access, notify RSO, and document.',
+            a: 'Correct! Power down, restrict access, notify RSO, and document.',
+            b: 'Incorrect. Stop immediately — do not finish the run. Review Section 9.',
             c: 'Incorrect. Never tape or defeat safety systems. Review Section 8.',
             d: 'Incorrect. A reboot is not an emergency response. Review Section 9.'
         }

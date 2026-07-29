@@ -17,9 +17,12 @@ Procedures are **facility safety procedures** derived from public instrument spe
 3. Enter an email to start; progress through 12 sections (knowledge checks gate “Next”).
 4. Complete the Section 12 commitment checklist, then pass the 15-question quiz at 100%.
 5. On completion you can:
+   - **Email Record to minsci@nhm.org** — downloads certificate (HTML) + JSON, then opens mail with subject/body filled (attach the downloads manually; browsers cannot auto-attach)
    - **Print / Save Certificate (PDF)** — browser print dialog; choose “Save as PDF”
    - **Add Retraining Reminder to Calendar** — downloads an `.ics` event (due date + 30-day and 7-day alarms)
-   - **Download JSON Record** — completion metadata for your files / supervisor
+   - **Download JSON Record** — completion metadata for your files
+
+Leaving the completion page shows a browser warning until you check that you have downloaded/emailed your record.
 
 ## Where is the JSON file?
 
@@ -27,14 +30,14 @@ Procedures are **facility safety procedures** derived from public instrument spe
 
 To get a copy:
 
-1. Click **Download JSON Record** on the completion screen, or
+1. Click **Email Record to minsci@nhm.org** or **Download JSON Record** on the completion screen, or
 2. In the browser console: `downloadAllRecords()` or `viewAllTrainingRecords()`
 
-Have trainees email you the JSON and/or the printed certificate if you need a central record.
+Send certificates and JSON records to **minsci@nhm.org**.
 
 ## Updating facility contacts
 
-Edit the block with `id="contacts-block"` in [`index.html`](index.html) (Section 9). Search for `contacts-block` and replace `[Name]`, `[Phone]`, `[Email]`, and after-hours number.
+Edit the block with `id="contacts-block"` in [`index.html`](index.html) (Section 9) for RSO/steward phone numbers. Training records go to minsci@nhm.org.
 
 ## Admin helpers (browser console)
 

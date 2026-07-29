@@ -467,6 +467,43 @@ table tr:nth-child(even) td {
     margin: 24px 0;
 }
 
+.email-minsci-line {
+    text-align: center;
+    margin: 8px 0 16px;
+    font-size: 0.98em;
+}
+
+.email-minsci-line a,
+.record-help a,
+.record-ack a,
+.contact-box a {
+    color: var(--accent);
+    font-weight: 600;
+}
+
+.record-ack {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    max-width: 640px;
+    margin: 0 auto 16px;
+    text-align: left;
+    padding: 12px 14px;
+    background: var(--bg-muted);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    cursor: pointer;
+    font-size: 0.95em;
+}
+
+.record-ack input {
+    margin-top: 3px;
+    width: 17px;
+    height: 17px;
+    flex-shrink: 0;
+    accent-color: var(--accent);
+}
+
 .record-help {
     text-align: left;
     max-width: 720px;
