@@ -1,11 +1,27 @@
 // Training state management
 let currentSection = 1;
-const totalSections = 11; // 10 training sections + 1 quiz section
+const totalTrainingSections = 12;
+const totalSections = 13; // 12 training sections + quiz
 let userEmail = '';
 let startTime = null;
 let quizPassed = false;
+const sectionKcPassed = {}; // knowledge checks completed per section
+let finalChecklistComplete = false;
 
-// DOM elements
+const kcFeedback = {
+    1: { b: 'Correct — soft lab X-rays deposit energy efficiently in tissue.' },
+    2: { c: 'Correct — the Horiba XGT-7200 is the cabinet micro-XRF.' },
+    3: { b: 'Correct — about 70% of damage is indirect via free radicals.' },
+    4: { c: 'Correct — extremity limit is typically 50 rem/year.' },
+    5: { b: 'Correct — ANSI N43.2 requires at least two independent interlocks.' },
+    6: { a: 'Correct — never open with X-rays generating; confirm safe state first.' },
+    7: { b: 'Correct — inverse square law: double distance → 25% intensity.' },
+    8: { b: 'Correct — treat as an emergency and notify the RSO.' },
+    9: { c: 'Correct — capture who, instrument, time, settings, access state, duration, witnesses.' },
+    10: { a: 'Correct — ANSI N43.2 covers XRD/XRF analysis equipment safety.' },
+    11: { b: 'Correct — mounting and centering are the highest-risk moments on the RAPID.' }
+};
+
 const loginSection = document.getElementById('login-section');
 const trainingContent = document.getElementById('training-content');
 const completionSection = document.getElementById('completion-section');
@@ -17,25 +33,27 @@ const progressFill = document.getElementById('progress');
 const currentSectionSpan = document.getElementById('current-section');
 const totalSectionsSpan = document.getElementById('total-sections');
 
-// Initialize
 document.addEventListener('DOMContentLoaded', () => {
-    totalSectionsSpan.textContent = totalSections;
+    totalSectionsSpan.textContent = totalTrainingSections;
     loadTrainingData();
+    initKnowledgeChecks();
+    initScenarioToggles();
+    initInstrumentTabs();
+    initFinalChecklist();
+    updateNextButtonState();
 });
 
-// Handle login form submission
 loginForm.addEventListener('submit', (e) => {
     e.preventDefault();
     userEmail = document.getElementById('user-email').value;
     startTime = new Date();
-    
+
     loginSection.classList.add('hidden');
     trainingContent.classList.remove('hidden');
-    
+
     showSection(1);
 });
 
-// Navigation handlers
 prevBtn.addEventListener('click', () => {
     if (currentSection > 1) {
         currentSection--;
@@ -44,6 +62,9 @@ prevBtn.addEventListener('click', () => {
 });
 
 nextBtn.addEventListener('click', () => {
+    if (!canAdvanceFrom(currentSection)) {
+        return;
+    }
     if (currentSection < totalSections) {
         currentSection++;
         showSection(currentSection);
@@ -54,36 +75,36 @@ completeBtn.addEventListener('click', () => {
     completeTraining();
 });
 
-// Show specific section
 function showSection(sectionNum) {
-    // Hide all sections
-    for (let i = 1; i <= 10; i++) {
+    for (let i = 1; i <= totalTrainingSections; i++) {
         document.getElementById(`section-${i}`).classList.add('hidden');
     }
     document.getElementById('quiz-section').classList.add('hidden');
-    
-    // Show current section
-    if (sectionNum === 11) {
+
+    const progressTextEl = document.querySelector('.progress-text');
+    if (sectionNum === totalSections) {
         document.getElementById('quiz-section').classList.remove('hidden');
+        if (progressTextEl) {
+            progressTextEl.innerHTML = 'Final Assessment Quiz';
+        }
     } else {
         document.getElementById(`section-${sectionNum}`).classList.remove('hidden');
+        if (progressTextEl) {
+            progressTextEl.innerHTML = `Section <span id="current-section">${sectionNum}</span> of <span id="total-sections">${totalTrainingSections}</span>`;
+        }
     }
-    
-    // Update progress
-    currentSectionSpan.textContent = sectionNum;
+
     const progressPercent = (sectionNum / totalSections) * 100;
     progressFill.style.width = progressPercent + '%';
-    
-    // Update navigation buttons
+
     if (sectionNum === 1) {
         prevBtn.classList.add('hidden');
     } else {
         prevBtn.classList.remove('hidden');
     }
-    
+
     if (sectionNum === totalSections) {
         nextBtn.classList.add('hidden');
-        // Only show complete button if quiz is passed
         if (quizPassed) {
             completeBtn.classList.remove('hidden');
         } else {
@@ -93,73 +114,182 @@ function showSection(sectionNum) {
         nextBtn.classList.remove('hidden');
         completeBtn.classList.add('hidden');
     }
-    
-    // Scroll to top
+
+    updateNextButtonState();
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-// Complete training and save data
+function canAdvanceFrom(sectionNum) {
+    if (sectionNum === totalSections) return false;
+
+    // Section 12: final checklist gate
+    if (sectionNum === 12) {
+        if (!finalChecklistComplete) {
+            alert('Please complete all checklist items before continuing to the quiz.');
+            return false;
+        }
+        return true;
+    }
+
+    // Knowledge check gate for sections that have one
+    const kc = document.querySelector(`#section-${sectionNum} .knowledge-check`);
+    if (kc && !sectionKcPassed[sectionNum]) {
+        alert('Please answer the knowledge check correctly before continuing.');
+        return false;
+    }
+    return true;
+}
+
+function updateNextButtonState() {
+    if (currentSection >= totalSections) {
+        nextBtn.disabled = false;
+        return;
+    }
+
+    if (currentSection === 12) {
+        nextBtn.disabled = !finalChecklistComplete;
+        nextBtn.title = finalChecklistComplete ? '' : 'Complete the checklist to continue';
+        return;
+    }
+
+    const kc = document.querySelector(`#section-${currentSection} .knowledge-check`);
+    if (kc) {
+        nextBtn.disabled = !sectionKcPassed[currentSection];
+        nextBtn.title = sectionKcPassed[currentSection] ? '' : 'Answer the knowledge check to continue';
+    } else {
+        nextBtn.disabled = false;
+        nextBtn.title = '';
+    }
+}
+
+function initKnowledgeChecks() {
+    document.querySelectorAll('.knowledge-check').forEach((kc) => {
+        const section = kc.dataset.section;
+        const correct = kc.dataset.correct;
+        const feedbackEl = kc.querySelector('.kc-feedback');
+
+        kc.querySelectorAll('input[type="radio"]').forEach((input) => {
+            input.addEventListener('change', () => {
+                const value = input.value;
+                feedbackEl.classList.remove('hidden');
+
+                if (value === correct) {
+                    sectionKcPassed[section] = true;
+                    const msg = (kcFeedback[section] && kcFeedback[section][correct]) || 'Correct!';
+                    feedbackEl.innerHTML = `<div class="success-box">${msg}</div>`;
+                } else {
+                    sectionKcPassed[section] = false;
+                    feedbackEl.innerHTML = `<div class="danger-box">Not quite — review this section and try again.</div>`;
+                }
+                updateNextButtonState();
+            });
+        });
+    });
+}
+
+function initScenarioToggles() {
+    document.querySelectorAll('.scenario-toggle').forEach((btn) => {
+        btn.addEventListener('click', () => {
+            const answer = btn.parentElement.querySelector('.scenario-answer');
+            const isHidden = answer.classList.contains('hidden');
+            answer.classList.toggle('hidden');
+            btn.textContent = isHidden ? 'Hide analysis' : 'Reveal analysis';
+        });
+    });
+}
+
+function initInstrumentTabs() {
+    const buttons = document.querySelectorAll('.tab-btn');
+    buttons.forEach((btn) => {
+        btn.addEventListener('click', () => {
+            const tab = btn.dataset.tab;
+            buttons.forEach((b) => b.classList.remove('active'));
+            btn.classList.add('active');
+
+            document.querySelectorAll('.tab-panel').forEach((panel) => {
+                panel.classList.add('hidden');
+                panel.classList.remove('active');
+            });
+            const panel = document.getElementById(`tab-${tab}`);
+            if (panel) {
+                panel.classList.remove('hidden');
+                panel.classList.add('active');
+            }
+        });
+    });
+}
+
+function initFinalChecklist() {
+    const checks = document.querySelectorAll('.final-check');
+    const status = document.getElementById('checklist-status');
+
+    const refresh = () => {
+        finalChecklistComplete = checks.length > 0 && Array.from(checks).every((c) => c.checked);
+        if (status) {
+            status.textContent = finalChecklistComplete
+                ? 'Checklist complete — you may proceed to the quiz.'
+                : 'Complete all items above to continue.';
+            status.classList.toggle('complete', finalChecklistComplete);
+        }
+        updateNextButtonState();
+    };
+
+    checks.forEach((c) => c.addEventListener('change', refresh));
+    refresh();
+}
+
 function completeTraining() {
     const completionDate = new Date();
     const nextTrainingDate = new Date(completionDate);
     nextTrainingDate.setFullYear(nextTrainingDate.getFullYear() + 2);
-    
+
     const trainingRecord = {
         email: userEmail,
         completionDate: completionDate.toISOString(),
         nextTrainingDue: nextTrainingDate.toISOString(),
         startTime: startTime.toISOString(),
-        duration: Math.round((completionDate - startTime) / 1000 / 60) // minutes
+        duration: Math.round((completionDate - startTime) / 1000 / 60),
+        instruments: ['Rigaku R-AXIS RAPID', 'Proto AXRD', 'Horiba XGT-7200'],
+        module: 'NHMLAC X-Ray Operator Safety Training'
     };
-    
-    // Save to localStorage (simulating server storage)
+
     saveTrainingRecord(trainingRecord);
-    
-    // Show completion screen
+
     trainingContent.classList.add('hidden');
     completionSection.classList.remove('hidden');
-    
+
     document.getElementById('completion-email').textContent = userEmail;
     document.getElementById('completion-date').textContent = formatDate(completionDate);
     document.getElementById('next-training-date').textContent = formatDate(nextTrainingDate);
-    
-    // Scroll to top
+
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-// Save training record to localStorage and generate JSON file
 function saveTrainingRecord(record) {
     let trainingData = JSON.parse(localStorage.getItem('xrayTrainingData') || '[]');
     trainingData.push(record);
     localStorage.setItem('xrayTrainingData', JSON.stringify(trainingData));
-    
-    // Also trigger download of updated JSON file
     generateJSONFile(trainingData);
 }
 
-// Load existing training data
 function loadTrainingData() {
     const data = JSON.parse(localStorage.getItem('xrayTrainingData') || '[]');
     console.log('Loaded training records:', data.length);
 }
 
-// Generate and download JSON file
 function generateJSONFile(data) {
     const jsonStr = JSON.stringify(data, null, 2);
     const blob = new Blob([jsonStr], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
-    
-    // Store the URL for download button
     window.trainingDataURL = url;
 }
 
-// Download certificate/completion record
 document.getElementById('download-cert-btn').addEventListener('click', () => {
     const trainingData = JSON.parse(localStorage.getItem('xrayTrainingData') || '[]');
     const jsonStr = JSON.stringify(trainingData, null, 2);
     const blob = new Blob([jsonStr], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
-    
+
     const a = document.createElement('a');
     a.href = url;
     a.download = `xray-training-records-${formatDateForFilename(new Date())}.json`;
@@ -169,11 +299,10 @@ document.getElementById('download-cert-btn').addEventListener('click', () => {
     URL.revokeObjectURL(url);
 });
 
-// Utility function to format date
 function formatDate(date) {
-    const options = { 
-        year: 'numeric', 
-        month: 'long', 
+    const options = {
+        year: 'numeric',
+        month: 'long',
         day: 'numeric',
         hour: '2-digit',
         minute: '2-digit'
@@ -181,7 +310,6 @@ function formatDate(date) {
     return date.toLocaleDateString('en-US', options);
 }
 
-// Utility function to format date for filename
 function formatDateForFilename(date) {
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, '0');
@@ -189,20 +317,18 @@ function formatDateForFilename(date) {
     return `${year}-${month}-${day}`;
 }
 
-// Admin function to view all training records (accessible via browser console)
-window.viewAllTrainingRecords = function() {
+window.viewAllTrainingRecords = function () {
     const data = JSON.parse(localStorage.getItem('xrayTrainingData') || '[]');
     console.table(data);
     return data;
 };
 
-// Admin function to download all training records (accessible via browser console)
-window.downloadAllRecords = function() {
+window.downloadAllRecords = function () {
     const trainingData = JSON.parse(localStorage.getItem('xrayTrainingData') || '[]');
     const jsonStr = JSON.stringify(trainingData, null, 2);
     const blob = new Blob([jsonStr], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
-    
+
     const a = document.createElement('a');
     a.href = url;
     a.download = `xray-training-records-${formatDateForFilename(new Date())}.json`;
@@ -210,28 +336,26 @@ window.downloadAllRecords = function() {
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
-    
+
     console.log(`Downloaded ${trainingData.length} training records`);
 };
 
-// Admin function to find users needing refresher training
-window.findUsersNeedingRefresher = function() {
+window.findUsersNeedingRefresher = function () {
     const data = JSON.parse(localStorage.getItem('xrayTrainingData') || '[]');
     const now = new Date();
-    
-    const needsRefresher = data.filter(record => {
+
+    const needsRefresher = data.filter((record) => {
         const nextDue = new Date(record.nextTrainingDue);
         return nextDue <= now;
     });
-    
+
     console.log(`${needsRefresher.length} users need refresher training:`);
     console.table(needsRefresher);
-    
+
     return needsRefresher;
 };
 
-// Admin function to clear all training data (use with caution)
-window.clearAllTrainingData = function() {
+window.clearAllTrainingData = function () {
     if (confirm('Are you sure you want to delete ALL training records? This cannot be undone.')) {
         localStorage.removeItem('xrayTrainingData');
         console.log('All training data cleared');
@@ -242,167 +366,204 @@ window.clearAllTrainingData = function() {
 // QUIZ FUNCTIONALITY
 // ============================================================================
 
-// Quiz answers and feedback
 const quizAnswers = {
     q1: {
         correct: 'b',
         feedback: {
-            a: 'Incorrect. 3.6 seconds is the time to deliver a lethal dose (500 rem), not the annual limit. Review Section 2 on dose rate characteristics.',
-            b: 'Correct! A typical 40 kV, 40 mA Cu tube delivers the annual occupational limit (5 rem) in approximately 0.036 seconds.',
-            c: 'Incorrect. This is far too long. The primary beam is extremely intense. Review Section 2 on quantitative hazard assessment.',
-            d: 'Incorrect. This is 10 times too long. Review Section 2 on dose rate characteristics for the correct calculation.'
+            a: 'Incorrect. 3.6 seconds is roughly the time to deliver a lethal dose (~500 rem), not the annual limit. Review Section 2.',
+            b: 'Correct! A typical 40 kV, 40 mA Cu tube can deliver ~5 rem in approximately 0.036 seconds at the exit port.',
+            c: 'Incorrect. Far too long — the primary beam is extremely intense. Review Section 2.',
+            d: 'Incorrect. This is 10× too long. Review Section 2.'
         }
     },
     q2: {
         correct: 'b',
         feedback: {
-            a: 'Incorrect. A single interlock does not provide adequate redundancy. ANSI N43.2 requires at least TWO independent interlocks. Review Section 5.',
-            b: 'Correct! ANSI N43.2 requires a minimum of TWO independent interlocks for personnel safety to ensure redundancy.',
-            c: 'Incorrect. While more interlocks provide additional safety, the minimum requirement is two. Review Section 5 on interlock requirements.',
-            d: 'Incorrect. Four interlocks exceed the minimum requirement. Review Section 5 on ANSI N43.2 standards.'
+            a: 'Incorrect. A single interlock lacks redundancy. ANSI N43.2 requires at least two. Review Section 5.',
+            b: 'Correct! ANSI N43.2 requires a minimum of two independent interlocks.',
+            c: 'Incorrect. More can help, but the minimum is two. Review Section 5.',
+            d: 'Incorrect. Four exceeds the minimum. Review Section 5.'
         }
     },
     q3: {
         correct: 'b',
         feedback: {
-            a: 'Incorrect. ALARA stands for "As Low As Reasonably Achievable." Review Section 3 on the ALARA principle.',
-            b: 'Correct! ALARA stands for "As Low As Reasonably Achievable" - a fundamental principle of radiation protection.',
-            c: 'Incorrect. This is not the correct acronym. Review Section 3 on radiation protection principles.',
-            d: 'Incorrect. ALARA is about optimization, not just meeting limits. Review Section 3 on the ALARA principle.'
+            a: 'Incorrect. ALARA = As Low As Reasonably Achievable. Review Section 3.',
+            b: 'Correct! ALARA means As Low As Reasonably Achievable.',
+            c: 'Incorrect. Review Section 3.',
+            d: 'Incorrect. ALARA is optimization, not merely meeting limits. Review Section 3.'
         }
     },
     q4: {
         correct: 'b',
         feedback: {
-            a: 'Incorrect. This would be true for linear attenuation, but radiation follows the inverse square law. Review Section 7 on the distance principle.',
-            b: 'Correct! According to the inverse square law, doubling the distance reduces intensity to 1/4 (25%). The formula is I(r) = I₀ × (r₀/r)².',
-            c: 'Incorrect. This would be the result of tripling the distance, not doubling. Review Section 7 on inverse square law calculations.',
-            d: 'Incorrect. This would be the result of quadrupling the distance. Review Section 7 on the inverse square law.'
+            a: 'Incorrect. Inverse square law — doubling distance → 1/4 intensity. Review Section 7.',
+            b: 'Correct! Doubling distance reduces intensity to 25%.',
+            c: 'Incorrect. That would be roughly tripling distance. Review Section 7.',
+            d: 'Incorrect. That would be quadrupling distance. Review Section 7.'
         }
     },
     q5: {
         correct: 'c',
         feedback: {
-            a: 'Incorrect. 5 rem is the annual limit for total effective dose (whole body), not extremities. Review Section 4 on dose limits.',
-            b: 'Incorrect. 15 rem is the annual limit for the lens of the eye. Review Section 4 on DOE 10 CFR 835 dose limits.',
-            c: 'Correct! The annual occupational dose limit for extremities (hands and feet) is 50 rem (500 mSv) according to DOE 10 CFR 835.',
-            d: 'Incorrect. This exceeds the regulatory limit. Review Section 4 on dose limits for different body parts.'
+            a: 'Incorrect. 5 rem is the whole-body effective dose limit. Review Section 4.',
+            b: 'Incorrect. 15 rem is typically the lens-of-eye limit. Review Section 4.',
+            c: 'Correct! Extremity limit is typically 50 rem (500 mSv) per year.',
+            d: 'Incorrect. That exceeds the usual extremity limit. Review Section 4.'
         }
     },
     q6: {
         correct: 'b',
         feedback: {
-            a: 'Incorrect. Direct DNA damage accounts for only about 30% of total damage. Review Section 3 on mechanisms of radiation damage.',
-            b: 'Correct! Indirect damage from free radicals (formed by water radiolysis) accounts for approximately 70% of total biological damage from X-rays.',
-            c: 'Incorrect. While protein damage occurs, it is not the primary mechanism. Review Section 3 on direct vs. indirect damage.',
-            d: 'Incorrect. Cell membrane disruption is not the primary damage mechanism. Review Section 3 on radiation damage mechanisms.'
+            a: 'Incorrect. Direct damage is ~30%. Review Section 3.',
+            b: 'Correct! Indirect free-radical damage is ~70%.',
+            c: 'Incorrect. Review Section 3.',
+            d: 'Incorrect. Review Section 3.'
         }
     },
     q7: {
         correct: 'd',
         feedback: {
-            a: 'Incorrect. Bypassing interlocks is NEVER acceptable, even during maintenance. Review Section 5 on the critical importance of interlocks.',
-            b: 'Incorrect. Proper alignment procedures should never require defeating interlocks. Review Section 5 and Section 7 on alignment safety.',
-            c: 'Incorrect. Even with RSO supervision, bypassing interlocks is strictly prohibited. Review Section 5 on interlock requirements.',
-            d: 'Correct! It is NEVER acceptable to bypass or defeat safety interlocks under any circumstances. This is a critical safety rule.'
+            a: 'Incorrect. Never bypass interlocks. Review Section 5.',
+            b: 'Incorrect. Alignment must never require defeating interlocks. Review Sections 5–7.',
+            c: 'Incorrect. Even with RSO present, operators must not defeat interlocks. Review Section 5.',
+            d: 'Correct! It is never acceptable to bypass or defeat safety interlocks.'
         }
     },
     q8: {
         correct: 'b',
         feedback: {
-            a: 'Incorrect. 2 Gy is the threshold for transient erythema, not main erythema. Review Section 3 on deterministic effects.',
-            b: 'Correct! The threshold dose for main erythema (skin reddening) is 6 Gy (600 rad), typically appearing 7-14 days after exposure.',
-            c: 'Incorrect. 10 Gy is the threshold for dry desquamation, which is more severe than erythema. Review Section 3 on skin effects.',
-            d: 'Incorrect. 15 Gy is the threshold for moist desquamation. Review Section 3 on acute dose thresholds for skin.'
+            a: 'Incorrect. 2 Gy is transient erythema. Review Section 3.',
+            b: 'Correct! Main erythema threshold is about 6 Gy.',
+            c: 'Incorrect. 10 Gy is dry desquamation. Review Section 3.',
+            d: 'Incorrect. 15 Gy is moist desquamation. Review Section 3.'
         }
     },
     q9: {
         correct: 'c',
         feedback: {
-            a: 'Incorrect. Daily visual inspections are recommended, but functional tests are performed less frequently. Review Section 5 on interlock testing.',
-            b: 'Incorrect. Weekly testing is not the standard frequency. Review Section 5 on interlock testing protocol.',
-            c: 'Correct! Interlock functional tests should be performed quarterly according to best practices, with daily visual inspections.',
-            d: 'Incorrect. Annual testing is too infrequent for functional tests, though comprehensive inspections are done annually. Review Section 5.'
+            a: 'Incorrect. Daily visual checks yes; functional tests are less frequent. Review Section 5.',
+            b: 'Incorrect. Review Section 5.',
+            c: 'Correct! Functional interlock tests: quarterly (with daily visual checks).',
+            d: 'Incorrect. Annual comprehensive inspections exist, but functional tests are quarterly. Review Section 5.'
         }
     },
     q10: {
         correct: 'c',
         feedback: {
-            a: 'Incorrect. While less than 1 rem is good, properly functioning systems should achieve much lower doses. Review Section 3 on ALARA.',
-            b: 'Incorrect. Even 100 mrem suggests potential issues with a properly enclosed system. Review Section 3 on expected operator doses.',
-            c: 'Correct! For properly functioning, enclosed XRD/XRF systems, operator doses should be effectively zero (less than 10 mrem/year). Any measurable dose indicates potential safety system degradation.',
-            d: 'Incorrect. This level of dose indicates a problem with the safety systems. Review Section 3 on expected doses from enclosed systems.'
+            a: 'Incorrect. Enclosed systems should do far better. Review Section 3.',
+            b: 'Incorrect. Even 100 mrem suggests investigation. Review Section 3.',
+            c: 'Correct! Operator dose should be effectively zero (&lt;10 mrem/year).',
+            d: 'Incorrect. That indicates a safety problem. Review Section 3.'
+        }
+    },
+    q11: {
+        correct: 'c',
+        feedback: {
+            a: 'Incorrect. RAPID is single-crystal XRD. Review Section 2.',
+            b: 'Incorrect. AXRD is powder XRD. Review Section 2.',
+            c: 'Correct! Horiba XGT-7200 is the cabinet micro-XRF.',
+            d: 'Incorrect. This lab training covers enclosed systems, not handheld open-beam XRF. Review Section 2.'
+        }
+    },
+    q12: {
+        correct: 'b',
+        feedback: {
+            a: 'Incorrect. Logbook work is not the high-risk step. Review Sections 2 and 6.',
+            b: 'Correct! Mounting and centering are the highest-risk moments on the RAPID.',
+            c: 'Incorrect. Collection with enclosure closed is designed to be safe. Review Section 6.',
+            d: 'Incorrect. Review Sections 2 and 6.'
+        }
+    },
+    q13: {
+        correct: 'b',
+        feedback: {
+            a: 'Incorrect. Never open the chamber during acquisition. Review Sections 2 and 6.',
+            b: 'Correct! Vacuum mode is for sample care; radiation rules still fully apply.',
+            c: 'Incorrect. Interlocks must remain active. Review Section 5.',
+            d: 'Incorrect. Dosimetry follows RSO requirements. Review Section 10.'
+        }
+    },
+    q14: {
+        correct: 'b',
+        feedback: {
+            a: 'Incorrect. Status lights are critical safety indicators. Review Sections 2 and 5.',
+            b: 'Correct! Use X-RAY ON / SHUTTER OPEN status before opening the enclosure.',
+            c: 'Incorrect. Review Section 6.',
+            d: 'Incorrect. Never defeat interlocks. Review Section 5.'
+        }
+    },
+    q15: {
+        correct: 'b',
+        feedback: {
+            a: 'Incorrect. Stop immediately — do not finish the run. Review Section 9.',
+            b: 'Correct! Power down, restrict access, notify RSO, and document.',
+            c: 'Incorrect. Never tape or defeat safety systems. Review Section 8.',
+            d: 'Incorrect. A reboot is not an emergency response. Review Section 9.'
         }
     }
 };
 
-// Submit quiz button handler
 document.getElementById('submit-quiz-btn').addEventListener('click', () => {
     submitQuiz();
 });
 
-// Retake quiz button handler
 document.getElementById('retake-quiz-btn').addEventListener('click', () => {
     retakeQuiz();
 });
 
-// Submit and grade quiz
 function submitQuiz() {
     let score = 0;
-    let totalQuestions = 10;
+    const totalQuestions = 15;
     let allAnswered = true;
-    
-    // Clear previous feedback
-    document.querySelectorAll('.quiz-feedback').forEach(el => {
+
+    document.querySelectorAll('#quiz-questions .quiz-feedback').forEach((el) => {
         el.classList.add('hidden');
         el.innerHTML = '';
     });
-    
-    // Check each question
+
     for (let i = 1; i <= totalQuestions; i++) {
         const questionName = `q${i}`;
         const selectedAnswer = document.querySelector(`input[name="${questionName}"]:checked`);
-        
+
         if (!selectedAnswer) {
             allAnswered = false;
             continue;
         }
-        
+
         const userAnswer = selectedAnswer.value;
         const correctAnswer = quizAnswers[questionName].correct;
-        const feedbackDiv = document.querySelector(`[data-question="${i}"] .quiz-feedback`);
-        
+        const feedbackDiv = document.querySelector(`#quiz-questions [data-question="${i}"] .quiz-feedback`);
+
         if (userAnswer === correctAnswer) {
             score++;
             feedbackDiv.innerHTML = `<div class="success-box">${quizAnswers[questionName].feedback[userAnswer]}</div>`;
         } else {
             feedbackDiv.innerHTML = `<div class="danger-box">${quizAnswers[questionName].feedback[userAnswer]}</div>`;
         }
-        
+
         feedbackDiv.classList.remove('hidden');
     }
-    
-    // Check if all questions answered
+
     if (!allAnswered) {
         alert('Please answer all questions before submitting.');
         return;
     }
-    
-    // Display results
+
     const percentage = (score / totalQuestions) * 100;
     const resultsDiv = document.getElementById('quiz-results');
     const scoreDiv = document.getElementById('quiz-score');
     const retakeBtn = document.getElementById('retake-quiz-btn');
     const submitBtn = document.getElementById('submit-quiz-btn');
-    
+
     resultsDiv.classList.remove('hidden');
-    
+
     if (percentage === 100) {
         scoreDiv.innerHTML = `
             <div class="success-box">
                 <h4>Congratulations! You Passed!</h4>
                 <p><strong>Score: ${score}/${totalQuestions} (${percentage}%)</strong></p>
-                <p>You have successfully completed the X-Ray Safety Training quiz. Click "Complete Training" below to receive your certificate.</p>
+                <p>You have successfully completed the X-Ray Operator Safety Training quiz. Click "Complete Training" below to receive your certificate.</p>
             </div>
         `;
         quizPassed = true;
@@ -414,7 +575,7 @@ function submitQuiz() {
             <div class="warning-box">
                 <h4>Quiz Not Passed</h4>
                 <p><strong>Score: ${score}/${totalQuestions} (${percentage}%)</strong></p>
-                <p>You must score 100% to complete the training. Please review the feedback above for incorrect answers and try again.</p>
+                <p>You must score 100% to complete the training. Review the feedback above and try again.</p>
             </div>
         `;
         quizPassed = false;
@@ -422,35 +583,27 @@ function submitQuiz() {
         retakeBtn.classList.remove('hidden');
         completeBtn.classList.add('hidden');
     }
-    
-    // Scroll to results
+
     resultsDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 }
 
-// Retake quiz - reset all answers and feedback
 function retakeQuiz() {
-    // Clear all radio button selections
-    document.querySelectorAll('input[type="radio"]').forEach(input => {
+    document.querySelectorAll('#quiz-questions input[type="radio"]').forEach((input) => {
         input.checked = false;
     });
-    
-    // Hide all feedback
-    document.querySelectorAll('.quiz-feedback').forEach(el => {
+
+    document.querySelectorAll('#quiz-questions .quiz-feedback').forEach((el) => {
         el.classList.add('hidden');
         el.innerHTML = '';
     });
-    
-    // Hide results
+
     document.getElementById('quiz-results').classList.add('hidden');
     document.getElementById('quiz-score').innerHTML = '';
-    
-    // Show submit button, hide retake button
+
     document.getElementById('submit-quiz-btn').classList.remove('hidden');
     document.getElementById('retake-quiz-btn').classList.add('hidden');
-    
-    // Reset quiz passed flag
+
     quizPassed = false;
-    
-    // Scroll to top of quiz
+
     document.getElementById('quiz-section').scrollIntoView({ behavior: 'smooth' });
 }
